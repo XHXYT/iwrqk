@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
-import 'package:background_downloader/background_downloader.dart' as bg;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_downloader/flutter_downloader.dart' as fd;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iwrqk/i18n/strings.g.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../utils/directory_extension.dart';
 import '../../utils/log_util.dart';
@@ -17,57 +20,49 @@ import '../models/download_task.dart';
 import '../models/offline/download_task_media.dart';
 import '../providers/storage_provider.dart';
 
+/// 后台 isolate 回调：转发到主 isolate
 @pragma('vm:entry-point')
-void iwrDownloadStatusCallback(bg.TaskStatusUpdate update) {
-  DownloadService.instance?._handleStatusUpdate(update);
-}
-
-@pragma('vm:entry-point')
-void iwrDownloadProgressCallback(bg.TaskProgressUpdate update) {
-  DownloadService.instance?._handleProgressUpdate(update);
+void iwrDownloadCallback(String id, int status, int progress) {
+  final SendPort? send = IsolateNameServer.lookupPortByName(
+    'iwr_downloader_port',
+  );
+  send?.send([id, status, progress]);
 }
 
 class IwrDownloadTaskStatus {
   DownloadTaskStatus status;
   int progress;
-
   IwrDownloadTaskStatus({required this.status, required this.progress});
 }
 
 class DownloadService extends GetxService {
   static DownloadService? _instance;
-
   static DownloadService? get instance => _instance;
 
   final int maxDownloadingCount = 5;
-
   final RxMap<String, Rx<IwrDownloadTaskStatus>> _downloadTasksStatus =
       <String, Rx<IwrDownloadTaskStatus>>{}.obs;
-
   RxMap<String, Rx<IwrDownloadTaskStatus>> get downloadTasksStatus =>
       _downloadTasksStatus;
 
-  // Stream for download completion
   RxInt currentDownloading = 0.obs;
+
+  final ReceivePort _port = ReceivePort();
+  bool _initialized = false;
 
   @override
   void onInit() {
     super.onInit();
     _instance = this;
-
     resetAllowMediaScan();
-
-    bg.FileDownloader().registerCallbacks(
-      taskStatusCallback: iwrDownloadStatusCallback,
-      taskProgressCallback: iwrDownloadProgressCallback,
-    );
-    bg.FileDownloader().start();
-    _getTasksStatusFromRecords();
+    _initDownloader();
   }
 
   @override
   void onClose() {
     _instance = null;
+    IsolateNameServer.removePortNameMapping('iwr_downloader_port');
+    _port.close();
     super.onClose();
   }
 
@@ -80,39 +75,59 @@ class DownloadService extends GetxService {
     );
   }
 
-  void _handleStatusUpdate(bg.TaskStatusUpdate update) {
-    final status = _convertBgStatus(update.status);
-    final existing = _downloadTasksStatus[update.task.taskId];
-    final progress = existing?.value.progress ?? 0;
+  /// flutter_downloader 初始化（只能成功调用一次）
+  Future<void> _initDownloader() async {
+    if (_initialized) return;
+    _initialized = true;
 
+    try {
+      // ignoreSsl: ohos 上默认 false 即可
+      await fd.FlutterDownloader.initialize(debug: kDebugMode);
+      IsolateNameServer.registerPortWithName(
+        _port.sendPort,
+        'iwr_downloader_port',
+      );
+      fd.FlutterDownloader.registerCallback(iwrDownloadCallback, step: 10);
+      _port.listen(_handleEvent);
+      await _getTasksStatusFromRecords();
+    } catch (e) {
+      _initialized = false;
+      LogUtil.error('FlutterDownloader initialize failed!', e);
+    }
+  }
+
+  void _handleEvent(Object? data) {
+    if (data is! List || data.length < 3) return;
+    _handleStatusUpdate(data[0] as String, data[1] as int, data[2] as int);
+  }
+
+  void _handleStatusUpdate(String taskId, int statusIndex, int progress) {
+    final status = _convertFdStatus(statusIndex);
+    final existing = _downloadTasksStatus[taskId];
     if (existing != null) {
       existing.value = IwrDownloadTaskStatus(
         status: status,
-        progress: progress,
+        progress: existing.value.progress,
       );
     } else {
-      _downloadTasksStatus[update.task.taskId] = IwrDownloadTaskStatus(
+      _downloadTasksStatus[taskId] = IwrDownloadTaskStatus(
         status: status,
         progress: progress,
       ).obs;
     }
-
     _recalculateCurrentDownloading();
     _downloadTasksStatus.refresh();
   }
 
-  void _handleProgressUpdate(bg.TaskProgressUpdate update) {
-    final progress = _convertBgProgress(update.progress);
-
+  void _handleProgressEvent(String taskId, int progress) {
     _downloadTasksStatus.putIfAbsent(
-      update.task.taskId,
+      taskId,
       () => IwrDownloadTaskStatus(
         status: DownloadTaskStatus.running,
         progress: progress,
       ).obs,
     );
-
-    _downloadTasksStatus[update.task.taskId]?.value.progress = progress;
+    _downloadTasksStatus[taskId]?.value.progress = progress;
     _downloadTasksStatus.refresh();
   }
 
@@ -128,13 +143,10 @@ class DownloadService extends GetxService {
 
   Future<void> allowMediaScan(bool allow) async {
     final downloadPath = downloadDirectory;
-
     if (downloadPath == null) {
       return;
     }
-
     final File noMediaFile = downloadPath.file('.nomedia');
-
     if (allow && await noMediaFile.exists()) {
       noMediaFile.delete(recursive: true);
     } else if (!allow && !await noMediaFile.exists()) {
@@ -147,60 +159,52 @@ class DownloadService extends GetxService {
       StorageKey.downloadDirectory,
       defaultValue: null,
     );
-
     if (savedDir != null) {
       return Directory(savedDir);
     }
-
     return PathUtil.getVisibleDir().dir('downloads');
   }
 
-  void _getTasksStatusFromRecords() async {
-    var records = await bg.FileDownloader().database.allRecords();
-
-    if (records.isNotEmpty) {
-      for (var record in records) {
-        _downloadTasksStatus.addAll({
-          record.task.taskId: IwrDownloadTaskStatus(
-            status: _convertBgStatus(record.status),
-            progress: _convertBgProgress(record.progress),
-          ).obs,
-        });
+  Future<void> _getTasksStatusFromRecords() async {
+    try {
+      final tasks = await fd.FlutterDownloader.loadTasks() ?? [];
+      for (final task in tasks) {
+        _downloadTasksStatus[task.taskId] = IwrDownloadTaskStatus(
+          status: _convertFdStatus(task.status.index),
+          progress: task.progress,
+        ).obs;
       }
+    } catch (e) {
+      LogUtil.error('Load download task records failed!', e);
     }
-
     _recalculateCurrentDownloading();
     _downloadTasksStatus.refresh();
   }
 
-  DownloadTaskStatus _convertBgStatus(bg.TaskStatus status) {
-    switch (status) {
-      case bg.TaskStatus.enqueued:
+  /// fd.DownloadTaskStatus -> 项目枚举
+  DownloadTaskStatus _convertFdStatus(int statusIndex) {
+    // fd 顺序: undefined, enqueued, running, complete, failed, canceled, paused
+    switch (statusIndex) {
+      case 1:
         return DownloadTaskStatus.enqueued;
-      case bg.TaskStatus.running:
+      case 2:
         return DownloadTaskStatus.running;
-      case bg.TaskStatus.complete:
+      case 3:
         return DownloadTaskStatus.complete;
-      case bg.TaskStatus.canceled:
-        return DownloadTaskStatus.canceled;
-      case bg.TaskStatus.paused:
-        return DownloadTaskStatus.paused;
-      case bg.TaskStatus.failed:
-      case bg.TaskStatus.notFound:
+      case 4:
+      case 0:
         return DownloadTaskStatus.failed;
-      case bg.TaskStatus.waitingToRetry:
-        return DownloadTaskStatus.enqueued;
+      case 5:
+        return DownloadTaskStatus.canceled;
+      case 6:
+        return DownloadTaskStatus.paused;
+      default:
+        return DownloadTaskStatus.failed;
     }
-  }
-
-  int _convertBgProgress(double progress) {
-    if (progress.isNegative) return 0;
-    return (progress * 100).round();
   }
 
   Future<bool> checkPermission() async {
     if (!GetPlatform.isAndroid) return true;
-
     try {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       if (androidInfo.version.sdkInt >= 30) {
@@ -212,7 +216,6 @@ class DownloadService extends GetxService {
       LogUtil.error('Request manageExternalStorage permission failed!', e);
       return false;
     }
-
     try {
       await Permission.storage.request();
       LogUtil.info(await Permission.storage.status);
@@ -229,8 +232,6 @@ class DownloadService extends GetxService {
       if (!dir.existsSync()) {
         dir.createSync(recursive: true);
       }
-
-      // Try to write a temporary file to ensure the directory is writable.
       final testFile = dir.file('.iwrqktest');
       testFile.writeAsStringSync('');
       testFile.deleteSync();
@@ -238,7 +239,6 @@ class DownloadService extends GetxService {
       LogUtil.error('${'invalidPath'.tr}:$path', e);
       return false;
     }
-
     return true;
   }
 
@@ -252,52 +252,65 @@ class DownloadService extends GetxService {
       SmartDialog.showToast(t.message.download.no_provide_storage_permission);
       return null;
     }
+    final bool isOhos = !kIsWeb && defaultTargetPlatform == TargetPlatform.ohos;
 
     Directory? directory = downloadDirectory;
-
     if (directory == null) {
       SmartDialog.showToast(t.message.download.no_provide_storage_permission);
       return null;
     }
 
     Directory path = directory.dir(subDirectory);
-
     if (!path.existsSync()) {
       path.createSync(recursive: true);
     }
 
-    var records = await bg.FileDownloader().database.allRecords();
-    if (records.isNotEmpty) {
-      bool hasExisted = records.any(
-        (var record) =>
-            basename(record.task.directory) == subDirectory &&
-            record.task.filename == fileName,
-      );
+    // 查重：仅当磁盘上实际存在同名文件时才拦截，
+    // 避免插件库残留记录（删除失败/只删应用层记录）导致无法重新下载
+    try {
+      final tasks = await fd.FlutterDownloader.loadTasks() ?? [];
+      bool hasExisted = false;
+      for (final task in tasks) {
+        if (basename(task.savedDir) != subDirectory) continue;
+        if (task.filename != fileName) continue;
+        // ohos 上 savedDir 存的是相对子目录，需拼回完整路径再验证
+        final String dirPath = isAbsolute(task.savedDir)
+            ? task.savedDir
+            : join(directory.path, task.savedDir);
+        final file = Directory(dirPath).file(task.filename ?? '');
+        if (file.existsSync()) {
+          hasExisted = true;
+          break;
+        }
+      }
       if (hasExisted) {
         SmartDialog.showToast(t.message.download.task_already_exists);
         return null;
       }
+    } on Exception catch (e) {
+      LogUtil.error('Check existed download tasks failed!', e);
     }
 
-    var task = bg.DownloadTask(
+    final taskId = await fd.FlutterDownloader.enqueue(
       url: downloadUrl,
-      filename: fileName,
-      directory: path.path,
-      baseDirectory: bg.BaseDirectory.root,
-      updates: bg.Updates.statusAndProgress,
-      allowPause: true,
+      savedDir: isOhos ? subDirectory : path.path,
+      fileName: fileName,
+      showNotification: true,
+      openFileFromNotification: false,
+      // ohos 上 false = 写应用沙箱，无需额外存储权限
+      saveInPublicStorage: false,
+      allowCellular: true,
     );
 
-    bool success = await bg.FileDownloader().enqueue(task);
-    if (success) {
-      _downloadTasksStatus[task.taskId] = IwrDownloadTaskStatus(
+    if (taskId != null) {
+      _downloadTasksStatus[taskId] = IwrDownloadTaskStatus(
         status: DownloadTaskStatus.enqueued,
         progress: 0,
       ).obs;
       _recalculateCurrentDownloading();
       _downloadTasksStatus.refresh();
     }
-    return success ? task.taskId : null;
+    return taskId;
   }
 
   Future<VideoDownloadTask?> createVideoDownloadTask({
@@ -306,7 +319,6 @@ class DownloadService extends GetxService {
     required DownloadTaskMediaModel offlineMedia,
   }) async {
     String? downloadTaskId;
-
     DateTime now = DateTime.now();
     Uri uri = Uri.parse(url);
     int expireTime = int.parse(uri.queryParameters['expires']!);
@@ -342,7 +354,6 @@ class DownloadService extends GetxService {
       resolutionName: resolutionName,
       offlineMedia: offlineMedia,
     );
-
     if (task != null) {
       _downloadTasksStatus.putIfAbsent(
         task.taskId,
@@ -353,7 +364,6 @@ class DownloadService extends GetxService {
       );
       _recalculateCurrentDownloading();
       _downloadTasksStatus.refresh();
-
       StorageProvider.downloadVideoRecords.add(task);
       return true;
     } else {
@@ -361,28 +371,45 @@ class DownloadService extends GetxService {
     }
   }
 
-  Future<bg.TaskRecord?> getTask(String taskId) {
-    return bg.FileDownloader().database.recordForId(taskId);
+  /// 注意：返回类型从 bg.TaskRecord? 改为 fd.DownloadTask?
+  Future<fd.DownloadTask?> getTask(String taskId) async {
+    try {
+      final tasks = await fd.FlutterDownloader.loadTasks() ?? [];
+      for (final task in tasks) {
+        if (task.taskId == taskId) return task;
+      }
+    } on Exception catch (e) {
+      LogUtil.error('Get download task failed!', e);
+    }
+    return null;
   }
 
   Future<int> get currentDownloadingCount async {
-    var records = await bg.FileDownloader().database.allRecordsWithStatus(
-      bg.TaskStatus.running,
-    );
-    return records.length;
+    try {
+      final tasks = await fd.FlutterDownloader.loadTasks() ?? [];
+      return tasks
+          .where((task) => task.status == fd.DownloadTaskStatus.running)
+          .length;
+    } on Exception catch (e) {
+      LogUtil.error('Get currentDownloadingCount failed!', e);
+      return 0;
+    }
   }
 
   Future<String?> getTaskFilePath(String taskId) async {
-    final record = await getTask(taskId);
-    if (record == null) return null;
-    final task = record.task;
-    return Directory(task.directory).file(task.filename).path;
+    final task = await getTask(taskId);
+    if (task == null) return null;
+    final String dirPath = isAbsolute(task.savedDir)
+        ? task.savedDir
+        : join(downloadDirectory?.path ?? '', task.savedDir);
+    return Directory(dirPath).file(task.filename ?? '').path;
   }
 
   Future<void> pauseTask(String taskId) async {
-    final task = await bg.FileDownloader().taskForId(taskId);
-    if (task is bg.DownloadTask) {
-      await bg.FileDownloader().pause(task);
+    try {
+      await fd.FlutterDownloader.pause(taskId: taskId);
+    } on Exception catch (e) {
+      LogUtil.error('Pause download task failed!', e);
     }
   }
 
@@ -393,36 +420,58 @@ class DownloadService extends GetxService {
         progress: 0,
       ).obs,
     });
-
     _downloadTasksStatus.remove(taskId);
     _recalculateCurrentDownloading();
     _downloadTasksStatus.refresh();
   }
 
   Future<String?> resumeTask(String taskId) async {
-    final task = await bg.FileDownloader().taskForId(taskId);
-    if (task is bg.DownloadTask) {
-      await bg.FileDownloader().resume(task);
+    try {
+      // ohos/Android 上 resume 成功会返回新 taskId，必须同步本地映射
+      final newId = await fd.FlutterDownloader.resume(taskId: taskId);
+      if (newId != null) {
+        refreshTask(taskId, newId);
+        return newId;
+      }
       return taskId;
+    } on Exception catch (e) {
+      LogUtil.error('Resume download task failed!', e);
+      return null;
     }
-    return null;
   }
 
   Future<String?> retryTask(String taskId) async {
-    final task = await bg.FileDownloader().taskForId(taskId);
-    if (task is bg.DownloadTask) {
-      await bg.FileDownloader().resume(task);
+    try {
+      final newId = await fd.FlutterDownloader.retry(taskId: taskId);
+      if (newId != null) {
+        refreshTask(taskId, newId);
+        return newId;
+      }
       return taskId;
+    } on Exception catch (e) {
+      LogUtil.error('Retry download task failed!', e);
+      return null;
     }
-    return null;
   }
 
-  Future<void> cancelTask(String taskId) {
-    return bg.FileDownloader().cancelTaskWithId(taskId);
+  Future<void> cancelTask(String taskId) async {
+    try {
+      await fd.FlutterDownloader.cancel(taskId: taskId);
+    } on Exception catch (e) {
+      LogUtil.error('Cancel download task failed!', e);
+    }
   }
 
   Future<void> deleteTaskRecord(String taskId) async {
-    await bg.FileDownloader().database.deleteRecordWithId(taskId);
+    try {
+      // shouldDeleteContent: false = 只删记录，保留已下载文件
+      await fd.FlutterDownloader.remove(
+        taskId: taskId,
+        shouldDeleteContent: false,
+      );
+    } on Exception catch (e) {
+      LogUtil.error('Delete download task record failed!', e);
+    }
     _downloadTasksStatus.remove(taskId);
     _recalculateCurrentDownloading();
     _downloadTasksStatus.refresh();

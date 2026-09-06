@@ -493,7 +493,7 @@ class ApiProvider {
     return ApiResult(data: image, success: message == null, message: message);
   }
 
-  static void sortResolutions(List<ResolutionModel> resolutions){
+  static void sortResolutions(List<ResolutionModel> resolutions) {
     resolutions.sort((a, b) {
       if (a.name == 'Source') return -1;
       if (b.name == 'Source') return 1;
@@ -642,12 +642,10 @@ class ApiProvider {
     String? message;
     int count = 0;
     List<UserModel> users = [];
-
     await networkProvider
         .get(path, queryParameters: queryParameters)
         .then((value) {
           message = value.data["message"];
-
           if (message != null) {
             if (message == "errors.notFound") {
               message = null;
@@ -656,25 +654,30 @@ class ApiProvider {
             }
           } else {
             count = value.data["count"];
-            if (type == UsersSourceType.followers) {
-              for (var item in value.data["results"]) {
-                users.add(UserModel.fromJson(item["follower"]));
+            for (var item in value.data["results"]) {
+              dynamic userJson;
+              if (type == UsersSourceType.followers) {
+                userJson = item["follower"];
+              } else if (type == UsersSourceType.following) {
+                userJson = item["user"];
+              } else {
+                userJson = item;
               }
-            } else if (type == UsersSourceType.following) {
-              for (var item in value.data["results"]) {
-                users.add(UserModel.fromJson(item["user"]));
-              }
-            } else if (type == UsersSourceType.search) {
-              for (var item in value.data["results"]) {
-                users.add(UserModel.fromJson(item));
+              // 列表中可能存在已注销/异常账号，follower/user 字段为 null，跳过
+              if (userJson == null) continue;
+              try {
+                users.add(UserModel.fromJson(userJson));
+              } catch (e) {
+                // 单个用户解析失败不阻塞整个列表
+                debugPrint("parse user failed: $e");
               }
             }
           }
         })
         .catchError((e, stackTrace) {
           message = e.toString();
+          debugPrint("getUsers error: $e\n$stackTrace");
         });
-
     return ApiResult(
       data: GroupResult(count: count, results: users),
       success: message == null,
@@ -1010,33 +1013,33 @@ class ApiProvider {
 
     await networkProvider
         .get(
-      "/search",
-      queryParameters: {
-        "query": keyword,
-        "page": pageNum,
-        "type": type.value,
-        if (orderType != null) "sort": orderType.value,
-      },
-    )
+          "/search",
+          queryParameters: {
+            "query": keyword,
+            "page": pageNum,
+            "type": type.value,
+            if (orderType != null) "sort": orderType.value,
+          },
+        )
         .then((value) {
-      message = value.data["message"];
+          message = value.data["message"];
 
-      if (message != null) {
-        if (message == "errors.notFound") {
-          message = null;
-          threads = [];
-          count = 0;
-        }
-      } else {
-        threads = (value.data["results"] as List)
-            .map((e) => ThreadModel.fromJson(e))
-            .toList();
-        count=value.data['count'];
-      }
-    })
+          if (message != null) {
+            if (message == "errors.notFound") {
+              message = null;
+              threads = [];
+              count = 0;
+            }
+          } else {
+            threads = (value.data["results"] as List)
+                .map((e) => ThreadModel.fromJson(e))
+                .toList();
+            count = value.data['count'];
+          }
+        })
         .catchError((e, stackTrace) {
-      message = e.toString();
-    });
+          message = e.toString();
+        });
 
     return ApiResult(
       data: GroupResult(count: count, results: threads),
@@ -1044,7 +1047,6 @@ class ApiProvider {
       message: message,
     );
   }
-
 
   static Future<ApiResult<void>> followUser({required String userId}) async {
     String? message;

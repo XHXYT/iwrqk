@@ -881,12 +881,21 @@ class PlPlayerController {
       setting.get(PLPlayerConfigKey.fullScreenMode, defaultValue: 0),
     )!;
 
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
     if (!isFullScreen.value && status) {
+      // 进全屏
+      // 先翻状态位，UI 立即响应，不依赖任何可能挂起的平台调用
       toggleFullScreen(true);
-      await enterFullScreen();
-
+      // 系统栏：immersiveSticky 在 ohos 上 Future 不回包，必须加超时
+      try {
+        await SystemChrome.setEnabledSystemUIMode(
+          SystemUiMode.immersiveSticky,
+        ).timeout(const Duration(milliseconds: 800));
+      } catch (e) {
+        LogUtil.error('triggerFullScreen: immersive timeout: $e');
+      }
+      // enterFullScreen 内部同样含 immersiveSticky，fire-and-forget
+      enterFullScreen();
+      // 方向切换
       if (mode == FullScreenMode.vertical ||
           (mode == FullScreenMode.auto && direction.value == 'vertical')) {
         await verticalScreen();
@@ -894,14 +903,13 @@ class PlPlayerController {
         await landScape();
       }
     } else if (isFullScreen.value) {
-      await SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.edgeToEdge,
-        overlays: SystemUiOverlay.values,
-      );
-
-      exitFullScreen();
-      await verticalScreen();
+      // 退全屏
+      // 先翻状态位（图标立即变回）
       toggleFullScreen(false);
+      // 先恢复竖屏——setPreferredOrientations 通道正常回包，可安全 await
+      await verticalScreen();
+      // 再恢复系统栏——不 await，内部有超时保护，避免挂起阻塞
+      exitFullScreen();
     }
   }
 

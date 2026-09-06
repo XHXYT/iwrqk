@@ -57,21 +57,21 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      status: json['status'],
-      role: json['role'],
-      followedBy: json['followedBy'],
-      following: json['following'],
-      friend: json['friend'],
-      premium: json['premium'],
-      seenAt: json['seenAt'],
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      username: json['username'] as String? ?? '',
+      status: json['status'] as String? ?? '',
+      role: json['role'] as String? ?? '',
+      followedBy: json['followedBy'] as bool? ?? false,
+      following: json['following'] as bool? ?? false,
+      friend: json['friend'] as bool? ?? false,
+      premium: json['premium'] as bool? ?? false,
+      seenAt: json['seenAt'] as String?,
       avatar: json['avatar'] != null
           ? ImageModel.fromJson(json['avatar'])
           : null,
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      createdAt: json['createdAt'] as String? ?? '',
+      updatedAt: json['updatedAt'] as String? ?? '',
     );
   }
 

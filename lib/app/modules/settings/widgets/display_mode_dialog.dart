@@ -74,24 +74,20 @@ class _DisplayModeDialogState extends State<DisplayModeDialog> {
             ),
           ),
         ),
-        child: CustomScrollView(
-          shrinkWrap: true,
-          slivers: [
-            if (modes.isEmpty)
-              SliverToBoxAdapter(child: Text(t.display_mode.no_available)),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((
-                BuildContext context,
-                int index,
-              ) {
-                final DisplayMode mode = modes[index];
-
-                return RadioListTile<DisplayMode>(
+        // AlertDialog 内部用 IntrinsicWidth 自适应宽度，
+        // CustomScrollView/viewport 不支持 intrinsic 查询会导致布局异常、弹窗空白，
+        // 因此改用 SingleChildScrollView
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (modes.isEmpty) Text(t.display_mode.no_available),
+              ...modes.map(
+                (mode) => RadioListTile<DisplayMode>(
                   value: mode,
                   title: mode == DisplayMode.auto
                       ? Text(t.display_mode.auto)
                       : Text(
-                          '$mode${mode == active ? "  [${t.display_mode.system}]" : ""}',
+                          '$mode${mode == active ? " [${t.display_mode.system}]" : ""}',
                         ),
                   groupValue: preferred,
                   onChanged: (DisplayMode? newMode) async {
@@ -103,10 +99,10 @@ class _DisplayModeDialogState extends State<DisplayModeDialog> {
                     HapticFeedback.mediumImpact();
                     await fetchAll();
                   },
-                );
-              }, childCount: modes.length),
-            ),
-          ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       actions: [

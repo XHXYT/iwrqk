@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_ohos/open_file_ohos.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../../components/iwr_refresh/widget.dart';
@@ -164,17 +164,13 @@ class _DownloadsMediaPreviewListState extends State<DownloadsMediaPreviewList>
                             );
                           },
                           onShare: (taskId) async {
-                            SharePlus.instance.share(
-                              ShareParams(
-                                files: [
-                                  XFile(
-                                    (await _controller.downloadService
-                                        .getTaskFilePath(taskId))!,
-                                    mimeType: 'video/mp4',
-                                  ),
-                                ],
+                            await Share.shareXFiles([
+                              XFile(
+                                (await _controller.downloadService
+                                    .getTaskFilePath(taskId))!,
+                                mimeType: 'video/mp4',
                               ),
-                            );
+                            ]);
                           },
                           gotoPlayer: gotoPlayer,
                           gotoDetail: gotoDetail,

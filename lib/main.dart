@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -9,6 +10,7 @@ import 'package:iwrqk/app/data/providers/network/network_provider.dart';
 import 'package:iwrqk/app/modules/settings/controller.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:window_manager/window_manager.dart';
+import 'app/data/providers/ohos_download_provider.dart';
 
 import 'app/const/colors.dart';
 import 'app/data/providers/config_provider.dart';
@@ -25,22 +27,50 @@ import 'i18n/strings.g.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  print('>>> [1] binding');
   MediaKit.ensureInitialized();
-
+  print('>>> [2] media_kit');
   await PathUtil.init();
   await StorageProvider.init();
   await LogUtil.init();
+  print('>>> [3] storage/log');
+  // ohos：启动时静默初始化公共下载目录（Download/包名，系统默认授权）。
+  // 仅在用户未设置过下载路径时生效，不覆盖用户已选目录；失败不阻塞启动。
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) {
+    try {
+      final saved = StorageProvider.config.get(
+        StorageKey.downloadDirectory,
+        defaultValue: null,
+      );
+      if (saved == null) {
+        final dir = await OhosDownloadProvider.getDownloadDir();
+        if (dir != null) {
+          StorageProvider.config[StorageKey.downloadDirectory] = dir;
+        }
+      }
+    } catch (e) {
+      LogUtil.error('Init ohos download dir failed', e);
+    }
+  }
+
   ProxyUtil.init();
   await setupServiceLocator();
+  print('>>> [4] serviceLocator');
   ConfigProvider.init();
-
+  print('>>> [4a] ConfigProvider OK');
   initGetx();
+  print('>>> [4b] initGetx OK');
+  print('>>> [5] getx');
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  print('>>> [6] orientation');
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+  ).timeout(const Duration(seconds: 1), onTimeout: () {}).catchError((_) {});
+  print('>>> [7] systemUI');
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
@@ -48,6 +78,7 @@ Future<void> main() async {
       statusBarColor: Colors.transparent,
     ),
   );
+  print('>>> [7b] overlayStyle');
 
   // Set language
   bool firstRun;
@@ -81,6 +112,7 @@ Future<void> main() async {
   }
 
   runApp(TranslationProvider(child: const MainApp()));
+  print('>>> [8] runApp done');
 }
 
 class MainApp extends StatefulWidget {

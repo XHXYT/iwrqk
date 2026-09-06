@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage_ohos/flutter_secure_storage_ohos.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../models/download_task.dart';

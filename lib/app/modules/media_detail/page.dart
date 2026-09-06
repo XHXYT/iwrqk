@@ -110,6 +110,7 @@ class _MediaDetailPageState extends State<MediaDetailPage>
   // 生命周期监听
   late final AppLifecycleListener _lifecycleListener;
   bool isShowing = true;
+  bool? _lastWantFull;
 
   ColorScheme get colorScheme =>
       _controller.dominantColorScheme.value ?? Theme.of(context).colorScheme;
@@ -274,19 +275,31 @@ class _MediaDetailPageState extends State<MediaDetailPage>
     commentsScrollController.removeListener(() {});
     fabAnimationController.dispose();
     commentsScrollController.dispose();
-
     if (_controller.mediaType == MediaType.video) {
       if (plPlayerController != null) {
         plPlayerController!.removeStatusLister(playerListener);
-        // 移除监听器以确保后台加载被中断
         plPlayerController!.removeListeners();
         plPlayerController!.dispose();
       }
       _controller.floating?.cancelOnLeavePiP();
       videoPlayerServiceHandler.onVideoDetailDispose();
       _lifecycleListener.dispose();
-    }
 
+      // 离开详情页：恢复系统栏显隐/方向 + 状态栏样式
+      // 样式恢复只在此处做一次，覆盖视频页 AppBar 写入的样式
+      exitFullScreen();
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Get.isDarkMode
+              ? Brightness.light
+              : Brightness.dark,
+          statusBarBrightness: Get.isDarkMode
+              ? Brightness.dark
+              : Brightness.light,
+        ),
+      );
+    }
     super.dispose();
   }
 
@@ -418,21 +431,17 @@ class _MediaDetailPageState extends State<MediaDetailPage>
             }),
             buildButton(Icons.share, t.media.share, () {
               if (_controller.mediaType == MediaType.video) {
-                SharePlus.instance.share(
-                  ShareParams(
-                    text: IwaraConst.videoPageUrl.replaceAll(
-                      "{id}",
-                      _controller.media.id,
-                    ),
+                Share.share(
+                  IwaraConst.videoPageUrl.replaceAll(
+                    "{id}",
+                    _controller.media.id,
                   ),
                 );
               } else {
-                SharePlus.instance.share(
-                  ShareParams(
-                    text: IwaraConst.imagePageUrl.replaceAll(
-                      "{id}",
-                      _controller.media.id,
-                    ),
+                Share.share(
+                  IwaraConst.imagePageUrl.replaceAll(
+                    "{id}",
+                    _controller.media.id,
                   ),
                 );
               }
@@ -1022,12 +1031,14 @@ class _MediaDetailPageState extends State<MediaDetailPage>
   Widget _buildPageFuture([bool inPip = false]) {
     Widget child;
     return Obx(() {
-      if (plPlayerController?.isFullScreen.value == true ||
+      final bool wantFull =
+          plPlayerController?.isFullScreen.value == true ||
           (!GetPlatform.isDesktop &&
-              Get.mediaQuery.orientation == Orientation.landscape)) {
-        enterFullScreen();
-      } else {
-        exitFullScreen();
+              Get.mediaQuery.orientation == Orientation.landscape);
+      // 只在状态翻转时调用，消除 build 内重复副作用
+      if (wantFull != _lastWantFull) {
+        _lastWantFull = wantFull;
+        wantFull ? enterFullScreen() : exitFullScreen();
       }
 
       if (_controller.isLoading) {

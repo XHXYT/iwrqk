@@ -15,19 +15,27 @@ import 'app/modules/media_detail/widgets/create_video_download_task/controller.d
 import 'app/modules/tabs/media_grid_tab/widgets/filter_page/controller.dart';
 
 void initGetx() {
+  print('>>> put ConfigService');
   Get.put(ConfigService());
+  print('>>> put DiscordRpcService');
   Get.put(DiscordRpcService());
+  print('>>> put AccountService');
   Get.put(AccountService());
-  Get.put(DownloadService());
+  print('>>> put DownloadService');
+  // Get.put(DownloadService());
+  Get.lazyPut(() => DownloadService(), fenix: true);
+  print('>>> put PreviewService');        
   Get.put(PreviewService());
+  print('>>> put UserService');
   Get.put(UserService());
-
+  print('>>> Get.create dialogs');
   Get.create(() => LoadingDialogController());
   Get.create(() => FilterController());
   Get.create(() => CreateVideoDownloadDialogController());
   Get.create(() => EditPlaylistDialogController());
   Get.create(() => AddToPlaylistBottomSheetController());
-
   Get.create(() => EditCommentBottomSheetController());
   Get.create(() => EditPostBottomSheetController());
+  print('>>> [4b] initGetx OK');
 }
+

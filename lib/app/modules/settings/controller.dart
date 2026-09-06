@@ -1,12 +1,13 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iwrqk/i18n/strings.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 import '../../const/config.dart';
 import '../../data/providers/config_provider.dart';
@@ -20,6 +21,7 @@ import '../../data/services/plugin/pl_player/service_locator.dart';
 import '../../routes/pages.dart';
 import '../../utils/display_util.dart';
 import '../../utils/log_util.dart';
+import '../../data/providers/ohos_download_provider.dart';
 
 class SettingsController extends GetxController {
   final ConfigService configService = Get.find();
@@ -116,10 +118,7 @@ class SettingsController extends GetxController {
   bool get enablePreview => configService.enablePreview;
 
   static final RxBool switchToAiSite =
-      ((StorageProvider.config[StorageKey.toAiSite] ?? false)==true).obs;
-
-
-
+      ((StorageProvider.config[StorageKey.toAiSite] ?? false) == true).obs;
 
   set enablePreview(bool value) {
     configService.enablePreview = value;
@@ -161,23 +160,31 @@ class SettingsController extends GetxController {
   }
 
   void changeDownloadPath() async {
+    // ohos 平台：走下载控件授权公共下载目录（下载/应用名），不使用目录选择器
+    final bool isOhos = !kIsWeb && defaultTargetPlatform == TargetPlatform.ohos;
+    if (isOhos) {
+      final String? dir = await OhosDownloadProvider.getDownloadDir();
+      if (dir == null) {
+        // 用户取消授权或通道异常，保持原路径不变
+        return;
+      }
+      downloadPath = Directory(dir);
+      SmartDialog.showToast(t.settings.download_path);
+      return;
+    }
+
     if (!await downloadService.checkPermission()) return;
-
     String? result;
-
     try {
       result = await FilePicker.platform.getDirectoryPath();
     } on Exception catch (e) {
       LogUtil.error('Pick download path failed', e);
     }
-
     if (result == null) return;
-
     if (!downloadService.checkPermissionForPath(result)) {
       SmartDialog.showToast(t.error.invalid_path);
       return;
     }
-
     downloadPath = Directory(result);
   }
 

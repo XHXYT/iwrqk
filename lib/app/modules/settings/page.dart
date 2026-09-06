@@ -16,7 +16,7 @@ import 'widgets/proxy_dialog.dart';
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({super.key});
 
-  Widget _buildMultiSetting<T>(
+   Widget _buildMultiSetting<T>(
     BuildContext context, {
     required String title,
     required String description,
@@ -26,7 +26,6 @@ class SettingsPage extends GetView<SettingsController> {
     required void Function(T) onSelected,
   }) {
     Rx<T> selected = currentOption.obs;
-
     return _buildButton(
       context,
       title: title,
@@ -47,25 +46,29 @@ class SettingsPage extends GetView<SettingsController> {
                   ),
                 ),
               ),
-              child: ListView(
-                shrinkWrap: true,
-                children: options.entries
-                    .map(
-                      (entry) => Obx(
-                        () => RadioListTile<T>(
-                          value: entry.key,
-                          title: Text(entry.value),
-                          groupValue: selected.value,
-                          onChanged: (T? value) {
-                            if (value != null) {
-                              HapticFeedback.mediumImpact();
-                              selected.value = value;
-                            }
-                          },
+              // AlertDialog 内部用 IntrinsicWidth 自适应宽度，
+              // ListView/viewport 不支持 intrinsic 查询会导致布局异常、弹窗空白，
+              // 因此改用 SingleChildScrollView + Column
+              child: SingleChildScrollView(
+                child: Column(
+                  children: options.entries
+                      .map(
+                        (entry) => Obx(
+                          () => RadioListTile<T>(
+                            value: entry.key,
+                            title: Text(entry.value),
+                            groupValue: selected.value,
+                            onChanged: (T? value) {
+                              if (value != null) {
+                                HapticFeedback.mediumImpact();
+                                selected.value = value;
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      )
+                      .toList(),
+                ),
               ),
             ),
             actions: [
@@ -498,19 +501,19 @@ class SettingsPage extends GetView<SettingsController> {
 
   Widget _buildSwitchToAISite(BuildContext context) {
     return Obx(
-        ()=>_buildSwitchSetting(
-          context,
-          title: t.settings.to_ai_site,
-          description: t.settings.to_ai_site_desc,
-          iconData: Icons.smart_toy_rounded,
-          onChanged: (value) {
-            SettingsController.switchToAiSite.value=value;
-            StorageProvider.config[StorageKey.toAiSite]=value;
-            // Refresh all home page tabs when switching AI site
-            _refreshHomePageTabs();
-          },
-          value: SettingsController.switchToAiSite.value,
-        )
+      () => _buildSwitchSetting(
+        context,
+        title: t.settings.to_ai_site,
+        description: t.settings.to_ai_site_desc,
+        iconData: Icons.smart_toy_rounded,
+        onChanged: (value) {
+          SettingsController.switchToAiSite.value = value;
+          StorageProvider.config[StorageKey.toAiSite] = value;
+          // Refresh all home page tabs when switching AI site
+          _refreshHomePageTabs();
+        },
+        value: SettingsController.switchToAiSite.value,
+      ),
     );
   }
 
@@ -519,12 +522,12 @@ class SettingsPage extends GetView<SettingsController> {
       // Get HomeController if it exists
       if (Get.isRegistered<HomeController>()) {
         final homeController = Get.find<HomeController>();
-        
+
         // Refresh all media grid tab controllers (Videos, Images, Subscriptions)
         for (var mediaController in homeController.mediaGridTabControllers) {
           mediaController.refreshCurrentTab();
         }
-        
+
         // Refresh forum tab controller
         homeController.forumTabController.refreshData(showSplash: false);
       }

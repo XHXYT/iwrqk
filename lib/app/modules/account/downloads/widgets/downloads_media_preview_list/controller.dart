@@ -52,16 +52,16 @@ class DownloadsMediaPreviewListController
       await StorageProvider.downloadVideoRecords.deleteByIndex(index);
     }
     await deleteTaskRecord(taskId);
-
-    File downloadFile = File(path!);
-    if (await downloadFile.exists()) {
-      await downloadFile.delete();
+    if (path != null) {
+      File downloadFile = File(path);
+      if (await downloadFile.exists()) {
+        await downloadFile.delete();
+      }
+      Directory downloadDir = downloadFile.parent;
+      if (await downloadDir.exists() && downloadDir.listSync().isEmpty) {
+        await downloadDir.delete();
+      }
     }
-    Directory downloadDir = downloadFile.parent;
-    if (await downloadDir.exists() && downloadDir.listSync().isEmpty) {
-      await downloadDir.delete();
-    }
-
     if (!retrying) data.removeAt(index);
   }
 
