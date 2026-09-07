@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';   
+import 'package:saver_gallery/saver_gallery.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../../../i18n/strings.g.dart';                            
+import '../../data/models/media/image.dart';
 import '../../components/comments_list/controller.dart';
 import '../../components/plugin/pl_player/index.dart';
 import '../../data/enums/types.dart';
@@ -512,6 +518,39 @@ class MediaDetailController extends GetxController
     }
 
     _isFectchingRecommendation.value = false;
+  }
+
+  Future<void> saveImageToGalleryByUrl(String url) async {
+    final int index = (media as ImageModel).galleryFileUrls.indexOf(url);
+    await _saveImageToGallery(url, index < 0 ? 0 : index);
+  }
+
+  Future<void> saveImageToGallery(int index) async {
+    await _saveImageToGallery(
+      (media as ImageModel).galleryFileUrls[index],
+      index,
+    );
+  }
+
+  Future<void> _saveImageToGallery(String url, int index) async {
+    try {
+      SmartDialog.showToast("开始保存…");
+      final resp = await Dio().get<List<int>>(
+        url,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      final ext = url.substring(url.lastIndexOf('.') + 1);
+      final result = await SaverGallery.saveImage(
+        Uint8List.fromList(resp.data!),
+        fileName: "iwrqk_${media.id}_${index + 1}.$ext",
+        androidRelativePath: "Pictures/IwrQk",
+        skipIfExists: true,
+      );
+      SmartDialog.showToast(result.isSuccess ? "已保存到相册" : "保存失败");
+    } catch (e) {
+      LogUtil.error("Save image to gallery failed", e);
+      SmartDialog.showToast(t.error.fetch_failed);
+    }
   }
 
   void favroiteMedia() {

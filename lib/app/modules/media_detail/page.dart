@@ -35,6 +35,7 @@ import 'controller.dart';
 import 'widgets/add_to_playlist/widget.dart';
 import 'widgets/create_video_download_task/widget.dart';
 import 'widgets/gallery/iwr_gallery.dart';
+import 'widgets/create_image_download_dialog/widget.dart';
 import 'widgets/media_desc.dart';
 
 class _WindowsPipDragMoveArea extends StatelessWidget {
@@ -427,8 +428,19 @@ class _MediaDetailPageState extends State<MediaDetailPage>
                     ),
                   ),
                 );
+              } else {
+                Get.dialog(
+                  Theme(
+                    data: Theme.of(context).copyWith(colorScheme: colorScheme),
+                    child: CreateImageDownloadDialog(
+                      image: _controller.media as ImageModel,
+                      onSave: _controller.saveImageToGallery,
+                    ),
+                  ),
+                );
               }
             }),
+
             buildButton(Icons.share, t.media.share, () {
               if (_controller.mediaType == MediaType.video) {
                 Share.share(
@@ -1025,6 +1037,7 @@ class _MediaDetailPageState extends State<MediaDetailPage>
   Widget _buildGallery() {
     return IwrGallery(
       imageUrls: (_controller.media as ImageModel).galleryFileUrls,
+      onSaveImage: (url) => _controller.saveImageToGalleryByUrl(url),
     );
   }
 

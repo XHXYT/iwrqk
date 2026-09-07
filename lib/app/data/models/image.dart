@@ -36,6 +36,8 @@ class ImageModel extends FileModel {
         .replaceFirst("{name}", name!);
   }
 
+  List<String> get galleryFileUrls => [getOriginalUrl()];
+
   @override
   Map<String, dynamic> toJson() {
     final json = super.toJson();

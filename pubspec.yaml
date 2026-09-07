@@ -21,6 +21,7 @@ dependencies:
 
   auto_size_text: ^3.0.0
 
+  saver_gallery: ^4.1.2
   # background_downloader 迁移到已适配的 flutter_downloader
   flutter_downloader:
     git:
@@ -87,7 +88,7 @@ dependencies:
   logger: ^2.6.2
   markdown_widget: ^2.3.2+8
 
-  # media_kit：实际由下方 overrides 指到 PiliPlus 用的 cnoim feat-ohos 分支
+  # media_kit：实际由下方 overrides 指到 feat-ohos 分支
   media_kit: ^1.2.2
   media_kit_libs_video: ^1.0.7
   media_kit_video: ^2.0.0

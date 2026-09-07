@@ -107,7 +107,7 @@ class DownloadService extends GetxService {
     if (existing != null) {
       existing.value = IwrDownloadTaskStatus(
         status: status,
-        progress: existing.value.progress,
+        progress: progress,
       );
     } else {
       _downloadTasksStatus[taskId] = IwrDownloadTaskStatus(

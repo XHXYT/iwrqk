@@ -20,7 +20,12 @@ class ConfigProvider {
     String? data;
     try {
       final response = await _dio.get(ConfigConst.checkUpdateUrl);
-      data = response.data[0]["tag_name"];
+      final releases = response.data;
+      if (releases is List && releases.isNotEmpty) {
+        data = releases[0]["tag_name"];
+      } else {
+        message = "No releases found";
+      }
     } catch (e) {
       message = e.toString();
     }
