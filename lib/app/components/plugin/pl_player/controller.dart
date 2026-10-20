@@ -12,10 +12,13 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
+import '../../../data/models/network_mode.dart';
 import '../../../data/providers/storage_provider.dart';
+import '../../../data/services/direct_connection_service.dart';
 import '../../../data/services/discord_rpc_service.dart';
 import '../../../data/services/plugin/pl_player/service_locator.dart';
 import '../../../utils/log_util.dart';
+import '../../../utils/proxy_util.dart';
 import 'index.dart';
 
 class PlPlayerController {
@@ -400,13 +403,26 @@ class PlPlayerController {
     }
 
     // Proxy
-    if (StorageProvider.config[StorageKey.proxyEnable] ?? false) {
-      String? proxyHost = StorageProvider.config[StorageKey.proxyHost];
-      String? proxyPort = StorageProvider.config[StorageKey.proxyPort];
+    switch (ProxyUtil.mode) {
+      case NetworkMode.direct:
+        final port = DirectConnectionService.instance.port;
+        if (port != null) {
+          await pp.setProperty('http-proxy', 'http://127.0.0.1:$port');
+        } else {
+          await pp.setProperty('http-proxy', '');
+        }
+        break;
+      case NetworkMode.proxy:
+        String? proxyHost = StorageProvider.config[StorageKey.proxyHost];
+        String? proxyPort = StorageProvider.config[StorageKey.proxyPort];
 
-      if (proxyHost != null && proxyPort != null) {
-        await pp.setProperty("http-proxy", "http://$proxyHost:$proxyPort");
-      }
+        if (proxyHost != null && proxyPort != null) {
+          await pp.setProperty("http-proxy", "http://$proxyHost:$proxyPort");
+        }
+        break;
+      case NetworkMode.standard:
+        await pp.setProperty('http-proxy', '');
+        break;
     }
 
     await pp.setProperty('demuxer-lavf-o', 'allowed_extensions=[ts,key]');

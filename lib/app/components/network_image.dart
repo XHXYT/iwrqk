@@ -14,6 +14,7 @@ class NetworkImg extends StatefulWidget {
   final double? aspectRatio;
   final BoxFit? fit;
   final bool isAdult;
+  final int? memCacheWidth;
 
   const NetworkImg({
     super.key,
@@ -23,6 +24,7 @@ class NetworkImg extends StatefulWidget {
     this.fit,
     this.aspectRatio,
     this.isAdult = false,
+    this.memCacheWidth,
   });
 
   @override
@@ -40,82 +42,104 @@ class _NetworkImgState extends State<NetworkImg>
     );
   }
 
+  int _resolveMemCacheWidth(BuildContext context, BoxConstraints constraints) {
+    if (widget.memCacheWidth != null) {
+      return widget.memCacheWidth!;
+    }
+
+    double logicalWidth = widget.width ??
+        (constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width);
+
+    return (logicalWidth * MediaQuery.devicePixelRatioOf(context)).round();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    final errorWidget = SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: const Center(child: Icon(Icons.image_not_supported)),
-    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final int memCacheWidth =
+            _resolveMemCacheWidth(context, constraints);
 
-    if (widget.aspectRatio != null) {
-      return AspectRatio(
-        aspectRatio: widget.aspectRatio!,
-        child: CachedNetworkImage(
-          imageUrl: widget.imageUrl,
-          httpHeaders: const {"referer": IwaraConst.referer},
-          imageBuilder: widget.isAdult && _configService.workMode
-              ? (context, imageProvider) {
-                  Widget image = Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: widget.fit,
-                      ),
-                    ),
-                  );
-                  return _buildFilterImage(image);
-                }
-              : null,
-          fit: widget.fit,
-          progressIndicatorBuilder: (context, url, progress) {
-            return Center(
-              child: Container(
-                margin: const EdgeInsets.all(5),
-                child: const CircularProgressIndicator(),
-              ),
-            );
-          },
-          errorWidget: (_, _, _) {
-            return errorWidget;
-          },
-        ),
-      );
-    } else {
-      return CachedNetworkImage(
-        imageUrl: widget.imageUrl,
-        width: widget.width,
-        height: widget.height,
-        fit: widget.fit,
-        httpHeaders: const {"referer": IwaraConst.referer},
-        imageBuilder: widget.isAdult && _configService.workMode
-            ? (context, imageProvider) {
-                Widget image = Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: widget.fit,
-                    ),
+        final errorWidget = SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: const Center(child: Icon(Icons.image_not_supported)),
+        );
+
+        if (widget.aspectRatio != null) {
+          return AspectRatio(
+            aspectRatio: widget.aspectRatio!,
+            child: CachedNetworkImage(
+              imageUrl: widget.imageUrl,
+              memCacheWidth: memCacheWidth,
+              httpHeaders: const {"referer": IwaraConst.referer},
+              imageBuilder: widget.isAdult && _configService.workMode
+                  ? (context, imageProvider) {
+                      Widget image = Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: widget.fit,
+                          ),
+                        ),
+                      );
+                      return _buildFilterImage(image);
+                    }
+                  : null,
+              fit: widget.fit,
+              progressIndicatorBuilder: (context, url, progress) {
+                return Center(
+                  child: Container(
+                    margin: const EdgeInsets.all(5),
+                    child: const CircularProgressIndicator(),
                   ),
                 );
-                return _buildFilterImage(image);
-              }
-            : null,
-        progressIndicatorBuilder: (context, url, progress) {
-          return Center(
-            child: Container(
-              margin: const EdgeInsets.all(5),
-              child: const CircularProgressIndicator(),
+              },
+              errorWidget: (_, _, _) {
+                return errorWidget;
+              },
             ),
           );
-        },
-        errorWidget: (_, _, _) {
-          return errorWidget;
-        },
-      );
-    }
+        } else {
+          return CachedNetworkImage(
+            imageUrl: widget.imageUrl,
+            memCacheWidth: memCacheWidth,
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            httpHeaders: const {"referer": IwaraConst.referer},
+            imageBuilder: widget.isAdult && _configService.workMode
+                ? (context, imageProvider) {
+                    Widget image = Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: widget.fit,
+                        ),
+                      ),
+                    );
+                    return _buildFilterImage(image);
+                  }
+                : null,
+            progressIndicatorBuilder: (context, url, progress) {
+              return Center(
+                child: Container(
+                  margin: const EdgeInsets.all(5),
+                  child: const CircularProgressIndicator(),
+                ),
+              );
+            },
+            errorWidget: (_, _, _) {
+              return errorWidget;
+            },
+          );
+        }
+      },
+    );
   }
 
   @override

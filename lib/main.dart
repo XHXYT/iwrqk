@@ -53,7 +53,7 @@ Future<void> main() async {
     }
   }
 
-  ProxyUtil.init();
+  await ProxyUtil.init();
   await setupServiceLocator();
   print('>>> [4] serviceLocator');
   ConfigProvider.init();

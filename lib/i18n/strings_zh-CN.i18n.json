@@ -69,7 +69,8 @@
     "trending": "流行",
     "popularity": "人气",
     "most_views": "最多观看",
-    "most_likes": "最多点赞"
+    "most_likes": "最多点赞",
+    "relevance": "相关度"
   },
   "filter": {
     "all": "全部",
@@ -86,6 +87,7 @@
   },
   "search": {
     "users": "用户",
+    "threads": "帖子",
     "search": "搜索",
     "history": {
       "delete": "删除所有记录"
@@ -227,9 +229,16 @@
     "work_mode_desc": "隐藏所有 NSFW 内容的封面",
     "animated_preview": "动画预览",
     "animated_preview_desc": "在悬停或长按时显示可用的视频动画预览",
+    "to_ai_site": "切换到AI站点内容",
+    "to_ai_site_desc": "切换到AI站点查看AIGC内容",
     "network": "网络设置",
-    "enable_proxy": "启用代理",
-    "enable_proxy_desc": "启用代理服务",
+    "network_mode": "网络模式",
+    "network_mode_standard": "标准连接",
+    "network_mode_standard_desc": "使用系统网络直接连接",
+    "network_mode_direct": "直连",
+    "network_mode_direct_desc": "通过 DoH 解析域名并直接连接 IP，失败时自动回退到已配置的代理",
+    "network_mode_proxy": "代理",
+    "network_mode_proxy_desc": "通过代理服务器连接",
     "proxy": "代理设置",
     "proxy_desc": "设置代理服务器",
     "player": "播放器设置",

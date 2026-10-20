@@ -127,4 +127,28 @@ class AccountService extends GetxService {
 
     return results;
   }
+
+  Future<ApiResult<void>> reloginOnTokenExpired() async {
+    token = await StorageProvider.userToken.get();
+
+    if (token == null || !_isExpired(token!)) {
+      return ApiResult(data: null, success: false);
+    }
+
+    Map<String, dynamic>? saved =
+        await StorageProvider.savedUserAccountPassword.get();
+
+    if (saved == null) {
+      return ApiResult(data: null, success: false);
+    }
+
+    dynamic account = saved["account"];
+    dynamic password = saved["password"];
+
+    if (account is! String || password is! String) {
+      return ApiResult(data: null, success: false);
+    }
+
+    return login(account: account, password: password);
+  }
 }

@@ -152,28 +152,23 @@ class LogUtil {
   }
 
   static Future<String> getSize() async {
-    Directory logDirectory = Directory(logDirPath);
+    try {
+      final logDirectory = Directory(logDirPath);
+      if (!await logDirectory.exists()) {
+        return DisplayUtil.getDisplayFileSizeWithUnit(0);
+      }
 
-    return logDirectory
-        .exists()
-        .then<int>((exist) {
-          if (!exist) {
-            return 0;
-          }
-
-          return logDirectory.list().fold<int>(
-            0,
-            (previousValue, element) =>
-                previousValue += (element as File).lengthSync(),
-          );
-        })
-        .then<String>(
-          (totalBytes) => DisplayUtil.getDisplayFileSizeWithUnit(totalBytes),
-        )
-        .onError((e, stackTrace) {
-          LogUtil.error('getSizeFailed', error, stackTrace);
-          return 'N/A';
-        });
+      int totalBytes = 0;
+      await for (final entity in logDirectory.list()) {
+        if (entity is File) {
+          totalBytes += await entity.length();
+        }
+      }
+      return DisplayUtil.getDisplayFileSizeWithUnit(totalBytes);
+    } catch (e, stackTrace) {
+      LogUtil.error('getSizeFailed', e, stackTrace);
+      return 'N/A';
+    }
   }
 
   static Future<void> clear() {

@@ -75,7 +75,8 @@
     "trending": "Trending",
     "popularity": "Popularity",
     "most_views": "Most views",
-    "most_likes": "Most likes"
+    "most_likes": "Most likes",
+    "relevance": "Relevance"
   },
   "filter": {
     "all": "All",
@@ -92,6 +93,7 @@
   },
   "search": {
     "users": "Users",
+    "threads": "Thread",
     "search": "Search",
     "history": {
       "delete": "Delete All"
@@ -233,9 +235,16 @@
     "work_mode_desc": "Hide all covers of NSFW content",
     "animated_preview": "Animated preview",
     "animated_preview_desc": "Show animated video preview on hover or long press (when available)",
+    "to_ai_site": "Switch to AI site content",
+    "to_ai_site_desc": "Switch to AI site to see AIGC contents",
     "network": "Network",
-    "enable_proxy": "Enable Proxy",
-    "enable_proxy_desc": "Enable proxy for the App",
+    "network_mode": "Network Mode",
+    "network_mode_standard": "Standard",
+    "network_mode_standard_desc": "Connect using the system network",
+    "network_mode_direct": "Direct Connection",
+    "network_mode_direct_desc": "Resolve domains via DoH and connect to IPs directly, falling back to the configured proxy on failure",
+    "network_mode_proxy": "Proxy",
+    "network_mode_proxy_desc": "Connect through a proxy server",
     "proxy": "Proxy",
     "proxy_desc": "Set the host and port of the proxy",
     "player": "Player",

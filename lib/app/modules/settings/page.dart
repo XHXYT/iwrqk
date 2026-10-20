@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iwrqk/i18n/strings.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../data/models/network_mode.dart';
 import '../../data/providers/storage_provider.dart';
 import '../../utils/log_util.dart';
 import '../home/controller.dart';
@@ -428,20 +429,79 @@ class SettingsPage extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildEnableProxySetting(BuildContext context) {
+  Widget _buildNetworkModeSetting(BuildContext context) {
     return Obx(
-      () => _buildSwitchSetting(
+      () => _buildButton(
         context,
-        title: t.settings.enable_proxy,
-        description: t.settings.enable_proxy_desc,
-        iconData: Icons.wifi,
-        value: controller.enableProxy,
-        restartRequired: true,
-        onChanged: (value) {
-          controller.enableProxy = value;
+        title: t.settings.network_mode,
+        description: _networkModeDescription(controller.networkMode),
+        iconData: Icons.network_check,
+        onPressed: () {
+          Get.dialog(
+            AlertDialog(
+              title: Text(t.settings.network_mode),
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: NetworkMode.values
+                    .map(
+                      (mode) => RadioListTile<NetworkMode>(
+                        value: mode,
+                        title: Text(_networkModeLabel(mode)),
+                        subtitle: Text(_networkModeDescription(mode)),
+                        groupValue: controller.networkMode,
+                        onChanged: (NetworkMode? value) {
+                          if (value != null) {
+                            HapticFeedback.mediumImpact();
+                            controller.networkMode = value;
+                            SmartDialog.showToast(t.message.restart_required);
+                            Get.back();
+                          }
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    t.notifications.cancel,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
+  }
+
+  String _networkModeLabel(NetworkMode mode) {
+    switch (mode) {
+      case NetworkMode.standard:
+        return t.settings.network_mode_standard;
+      case NetworkMode.direct:
+        return t.settings.network_mode_direct;
+      case NetworkMode.proxy:
+        return t.settings.network_mode_proxy;
+    }
+  }
+
+  String _networkModeDescription(NetworkMode mode) {
+    switch (mode) {
+      case NetworkMode.standard:
+        return t.settings.network_mode_standard_desc;
+      case NetworkMode.direct:
+        return t.settings.network_mode_direct_desc;
+      case NetworkMode.proxy:
+        return t.settings.network_mode_proxy_desc;
+    }
   }
 
   Widget _buildSetProxyButton(BuildContext context) {
@@ -477,8 +537,13 @@ class SettingsPage extends GetView<SettingsController> {
           _buildAnimatedPreviewSetting(context),
           _buildSwitchToAISite(context),
           SettingTitle(title: t.settings.network),
-          _buildEnableProxySetting(context),
-          _buildSetProxyButton(context),
+          _buildNetworkModeSetting(context),
+          Obx(
+            () => Visibility(
+              visible: controller.networkMode != NetworkMode.standard,
+              child: _buildSetProxyButton(context),
+            ),
+          ),
           SettingTitle(title: t.settings.player),
           _buildAutoPlaySetting(context),
           _buildBackgroundPlaySetting(context),

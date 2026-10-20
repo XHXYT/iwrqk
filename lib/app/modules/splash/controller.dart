@@ -52,12 +52,26 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
         }
         if (!success) {
           print('>>> splash login failed -> home + login');
-          _userService.accountService.logout();
+          // 网络失败时仅重置内存状态，保留 token，
+          // 避免因暂时性网络问题把登录凭据清掉导致被登出
+          _userService.accountService.reset();
           Get.offNamed(AppRoutes.home);
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Get.toNamed(AppRoutes.login);
           });
           return;
+        }
+      } else {
+        print('>>> splash step1b: reloginOnTokenExpired');
+        final relogin =
+            await _userService.accountService.reloginOnTokenExpired();
+        print('>>> splash step1b result: ${relogin.success}');
+        if (relogin.success) {
+          bool success = await _userService.init();
+          print('>>> splash relogin init: $success');
+          if (!success) {
+            _userService.accountService.reset();
+          }
         }
       }
       print('>>> splash -> home');

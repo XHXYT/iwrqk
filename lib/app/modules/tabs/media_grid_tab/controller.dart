@@ -10,6 +10,10 @@ class MediaGridTabController extends GetxController
 
   late List<String> _tabTagList;
 
+  /// [init] 尚未被调用时（对应页面从未构建过）为 false，
+  /// 此时刷新/滚动相关方法直接跳过，避免 LateInitializationError
+  bool _initialized = false;
+
   void init({required List<String> tagList}) {
     _tabTagList = tagList;
     tabController = TabController(length: tagList.length, vsync: this);
@@ -20,9 +24,13 @@ class MediaGridTabController extends GetxController
     for (String tag in _tabTagList) {
       Get.lazyPut(() => MediaPreviewGridController(), tag: tag);
     }
+    _initialized = true;
   }
 
   void scrollToTop() {
+    if (!_initialized) {
+      return;
+    }
     ScrollController controller = scrollControllers[tabController.index];
     if (controller.hasClients) {
       controller.animateTo(
@@ -34,6 +42,9 @@ class MediaGridTabController extends GetxController
   }
 
   void scrollToTopRefresh() {
+    if (!_initialized) {
+      return;
+    }
     ScrollController controller = scrollControllers[tabController.index];
     if (controller.hasClients) {
       controller.animateTo(
@@ -46,6 +57,9 @@ class MediaGridTabController extends GetxController
   }
 
   void refreshCurrentTab() {
+    if (!_initialized) {
+      return;
+    }
     MediaPreviewGridController targetController =
         Get.find<MediaPreviewGridController>(
           tag: _tabTagList[tabController.index],

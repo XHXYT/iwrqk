@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 import '../../const/config.dart';
+import '../../data/models/network_mode.dart';
 import '../../data/providers/config_provider.dart';
 import '../../data/providers/storage_provider.dart';
 import '../../data/services/account_service.dart';
@@ -103,11 +104,11 @@ class SettingsController extends GetxController {
     StorageProvider.config[StorageKey.allowMediaScan] = value;
   }
 
-  final RxBool _enableProxy = false.obs;
-  bool get enableProxy => _enableProxy.value;
-  set enableProxy(bool value) {
-    _enableProxy.value = value;
-    StorageProvider.config[StorageKey.proxyEnable] = value;
+  final Rx<NetworkMode> _networkMode = NetworkMode.standard.obs;
+  NetworkMode get networkMode => _networkMode.value;
+  set networkMode(NetworkMode value) {
+    _networkMode.value = value;
+    value.save();
   }
 
   bool get workMode => configService.workMode;
@@ -142,8 +143,7 @@ class SettingsController extends GetxController {
     _enableDiscordRichPresence.value =
         StorageProvider.config[ConfigKey.enableDiscordRichPresence] ?? false;
 
-    _enableProxy.value =
-        StorageProvider.config[StorageKey.proxyEnable] ?? false;
+    _networkMode.value = NetworkMode.load();
 
     _enableLogging.value =
         StorageProvider.config[StorageKey.loggingEnable] ?? true;

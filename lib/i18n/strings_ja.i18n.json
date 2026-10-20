@@ -69,7 +69,8 @@
     "trending": "トレンド",
     "popularity": "人気順",
     "most_views": "閲覧数",
-    "most_likes": "お気に入り数"
+    "most_likes": "お気に入り数",
+    "relevance": "関連性"
   },
   "filter": {
     "all": "すべて",
@@ -86,6 +87,7 @@
   },
   "search": {
     "users": "ユーザー",
+    "threads": "投稿",
     "search": "検索",
     "history": {
       "delete": "すべての記録を削除"
@@ -227,9 +229,16 @@
     "work_mode_desc": "NSFW コンテンツのカバーを非表示にします",
     "animated_preview": "動画プレビュー",
     "animated_preview_desc": "ホバー（PC）または長押し（タッチ）でアニメーションプレビューを表示します",
+    "to_ai_site": "AIサイトのコンテンツに切り替える",
+    "to_ai_site_desc": "AIサイトに切り替えてAIGCコンテンツを表示します",
     "network": "ネットワーク設定",
-    "enable_proxy": "プロキシを有効にする",
-    "enable_proxy_desc": "プロキシサービスを有効にします",
+    "network_mode": "ネットワークモード",
+    "network_mode_standard": "標準接続",
+    "network_mode_standard_desc": "システムのネットワークで直接接続します",
+    "network_mode_direct": "ダイレクト接続",
+    "network_mode_direct_desc": "DoH でドメインを解決し IP に直接接続します。失敗時は設定したプロキシにフォールバックします",
+    "network_mode_proxy": "プロキシ",
+    "network_mode_proxy_desc": "プロキシサーバー経由で接続します",
     "proxy": "プロキシ設定",
     "proxy_desc": "プロキシサーバーを設定します",
     "player": "プレイヤー設定",

@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iwrqk/i18n/strings.g.dart';
@@ -277,7 +276,7 @@ class HistoryMediaPreview extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: AutoSizeText(
+            child: Text(
               media.title,
               maxLines: 2,
               style: const TextStyle(

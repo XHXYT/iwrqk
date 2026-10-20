@@ -69,7 +69,8 @@
     "trending": "趨勢",
     "popularity": "熱門",
     "most_views": "最多觀看",
-    "most_likes": "最多按讚"
+    "most_likes": "最多按讚",
+    "relevance": "相關度"
   },
   "filter": {
     "all": "全部",
@@ -86,6 +87,7 @@
   },
   "search": {
     "users": "使用者",
+    "threads": "帖子",
     "search": "搜尋",
     "history": {
       "delete": "刪除所有紀錄"
@@ -227,9 +229,16 @@
     "work_mode_desc": "隱藏所有 NSFW 內容的封面",
     "animated_preview": "動畫預覽",
     "animated_preview_desc": "在懸停或長按時顯示可用的影片動畫預覽",
+    "to_ai_site": "切換到AI站點內容",
+    "to_ai_site_desc": "切換到AI站點查看AIGC內容",
     "network": "網路設定",
-    "enable_proxy": "啟用代理",
-    "enable_proxy_desc": "啟用代理服務",
+    "network_mode": "網路模式",
+    "network_mode_standard": "標準連線",
+    "network_mode_standard_desc": "使用系統網路直接連線",
+    "network_mode_direct": "直連",
+    "network_mode_direct_desc": "透過 DoH 解析網域並直接連線 IP，失敗時自動回退到已設定的代理",
+    "network_mode_proxy": "代理",
+    "network_mode_proxy_desc": "透過代理伺服器連線",
     "proxy": "代理設定",
     "proxy_desc": "設定代理伺服器",
     "player": "播放器設定",

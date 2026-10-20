@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iwrqk/i18n/strings.g.dart';
@@ -57,7 +56,7 @@ class DownloadMediaPreview extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 5),
-          child: AutoSizeText(
+          child: Text(
             message,
             maxLines: 1,
             style: TextStyle(
@@ -170,7 +169,7 @@ class DownloadMediaPreview extends StatelessWidget {
                   ),
                 ),
               ),
-              AutoSizeText(
+              Text(
                 totalSize,
                 maxLines: 1,
                 style: TextStyle(
@@ -219,7 +218,7 @@ class DownloadMediaPreview extends StatelessWidget {
               0,
             );
           default:
-            return AutoSizeText(
+            return Text(
               t.download.unknown,
               maxLines: 1,
               style: const TextStyle(
@@ -230,7 +229,7 @@ class DownloadMediaPreview extends StatelessWidget {
             );
         }
       } else {
-        return AutoSizeText(
+        return Text(
           t.download.unknown,
           maxLines: 1,
           style: const TextStyle(
@@ -399,7 +398,7 @@ class DownloadMediaPreview extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: AutoSizeText(
+            child: Text(
               media.title,
               maxLines: 2,
               style: TextStyle(
