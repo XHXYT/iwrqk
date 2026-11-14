@@ -1,7 +1,7 @@
 name: iwrqk
 description: "A new Flutter project."
 publish_to: "none"
-version: 2.2.3
+version: 2.2.5
 
 environment:
   sdk: ^3.11.0-93.1.beta
@@ -38,7 +38,9 @@ dependencies:
 
   # Discord RPC：桌面专属，代码里用 Platform.isWindows||isMacOS||isLinux 包住
   dart_discord_rpc:
-    path: third_party/dart_discord_rpc
+    git:
+      url: https://gitcode.com/Ya520/dart_discord_rpc.git
+      ref: "0.0.3"
 
   dio: ^5.9.0
   dio_cookie_manager: ^3.3.0
@@ -143,8 +145,12 @@ dev_dependencies:
 # 鸿蒙适配核心（PiliPlus 已验证源 + CPF-Flutter 官方 TAG）
 dependency_overrides:
   # ---- 音频 ----
+  # audio_service：fork CPF-Flutter OHOS 移植版 + 锁屏/通知封面修复
   audio_service:
-    path: third_party/audio_service
+    git:
+      url: https://gitcode.com/Ya520/fluttertpc_audio_service.git
+      path: audio_service
+      ref: ohos-cover-fix
   audio_session:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_audio_session.git
@@ -222,6 +228,12 @@ dependency_overrides:
     path: D:/HUAWEI/DevEcoStudioProjects/FlutterProjects/flutter_permission_handler/permission_handler
   permission_handler_ohos:
     path: D:/HUAWEI/DevEcoStudioProjects/FlutterProjects/flutter_permission_handler/permission_handler_ohos
+
+  # jni：1.0.3，补 ohosArm/ohosArm64/ohosX64 的 AbiSpecificInteger 映射（release AOT 必需）
+  jni:
+    git:
+      url: https://gitcode.com/Ya520/jni.git
+      ref: 1.0.3-ohos
 
 flutter:
   uses-material-design: true

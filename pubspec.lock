@@ -36,9 +36,11 @@ packages:
   audio_service:
     dependency: "direct main"
     description:
-      path: "third_party/audio_service"
-      relative: true
-    source: path
+      path: audio_service
+      ref: ohos-cover-fix
+      resolved-ref: "3da28d434098ab45f26f05338a3b8937649192f0"
+      url: "https://gitcode.com/Ya520/fluttertpc_audio_service.git"
+    source: git
     version: "0.18.18"
   audio_service_platform_interface:
     dependency: transitive
@@ -220,9 +222,11 @@ packages:
   dart_discord_rpc:
     dependency: "direct main"
     description:
-      path: "third_party/dart_discord_rpc"
-      relative: true
-    source: path
+      path: "."
+      ref: "0.0.3"
+      resolved-ref: a8ef6461837ded201af06a875bfa8007d52a5055
+      url: "https://gitcode.com/Ya520/dart_discord_rpc.git"
+    source: git
     version: "0.0.3"
   dbus:
     dependency: transitive
@@ -739,12 +743,13 @@ packages:
     source: hosted
     version: "0.20.3"
   jni:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: jni
-      sha256: f038e58b4dc2c9037f50e233175086337e0b305e356d28211bf55f21c504cbd3
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: "1.0.3-ohos"
+      resolved-ref: "3a44d1e8fa4b777c85271820ef8c63e2db69167a"
+      url: "https://gitcode.com/Ya520/jni.git"
+    source: git
     version: "1.0.3"
   jni_flutter:
     dependency: transitive
