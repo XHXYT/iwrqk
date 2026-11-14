@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "audio_service_example"
+    },
+    {
+      "name": "KEEP_BACKGROUND_RUNNING",
+      "value": "在后台播放音频文件"
+    }
+  ]
+}

@@ -144,10 +144,7 @@ dev_dependencies:
 dependency_overrides:
   # ---- 音频 ----
   audio_service:
-    git:
-      url: https://gitcode.com/CPF-Flutter/fluttertpc_audio_service.git
-      path: audio_service
-      ref: br_v0.18.18_ohos
+    path: third_party/audio_service
   audio_session:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_audio_session.git

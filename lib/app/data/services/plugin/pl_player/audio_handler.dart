@@ -1,7 +1,9 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:get/get.dart';
 
 import '../../../../components/plugin/pl_player/controller.dart';
 import '../../../../components/plugin/pl_player/models/play_status.dart';
+import '../../../../const/iwara.dart';
 import '../../../providers/storage_provider.dart';
 
 Future<VideoPlayerServiceHandler> initAudioService() async {
@@ -23,14 +25,14 @@ Future<VideoPlayerServiceHandler> initAudioService() async {
 class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   static final List<MediaItem> _item = [];
   GStorageConfig setting = StorageProvider.config;
-  bool enableBackgroundPlay = false;
+  final RxBool enableBackgroundPlay = false.obs;
 
   VideoPlayerServiceHandler() {
     revalidateSetting();
   }
 
   void revalidateSetting() {
-    enableBackgroundPlay = setting.get(
+    enableBackgroundPlay.value = setting.get(
       PLPlayerConfigKey.enableBackgroundPlay,
       defaultValue: false,
     );
@@ -53,12 +55,12 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> setMediaItem(MediaItem newMediaItem) async {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
     mediaItem.add(newMediaItem);
   }
 
   Future<void> setPlaybackState(PlayerStatus status, bool isBuffering) async {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
 
     final AudioProcessingState processingState;
     final playing = status == PlayerStatus.playing;
@@ -87,14 +89,14 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void onStatusChange(PlayerStatus status, bool isBuffering) {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
 
     if (_item.isEmpty) return;
     setPlaybackState(status, isBuffering);
   }
 
   void onVideoChange(Map data) {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
 
     late MediaItem? mediaItem;
     mediaItem = MediaItem(
@@ -103,6 +105,9 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       artist: data["artist"],
       duration: Duration(seconds: data["duration"]),
       artUri: data.containsKey("cover") ? Uri.parse(data["cover"]) : null,
+      artHeaders: data.containsKey("cover")
+          ? const {'referer': IwaraConst.referer}
+          : null,
     );
 
     setMediaItem(mediaItem);
@@ -110,7 +115,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void onVideoDetailDispose() {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
 
     playbackState.add(
       playbackState.value.copyWith(
@@ -131,7 +136,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void clear() {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
 
     mediaItem.add(null);
     playbackState.add(
@@ -142,7 +147,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void onPositionChange(Duration position) {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay.value) return;
 
     playbackState.add(playbackState.value.copyWith(updatePosition: position));
   }

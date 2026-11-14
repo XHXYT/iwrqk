@@ -378,6 +378,38 @@ class MediaDetailController extends GetxController
     playerInit(video: video);
   }
 
+  /// 重新开启后台播放后，用当前视频重建系统播控会话
+  /// （关闭开关时 clear() 已清空 _item，仅靠后续状态推送无法恢复）
+  void refreshMediaSession() {
+    if (mediaType != MediaType.video) return;
+
+    if (isOffline) {
+      videoPlayerServiceHandler.onVideoChange({
+        "id": taskData.offlineMedia.id,
+        "title": taskData.offlineMedia.title,
+        "artist": taskData.offlineMedia.uploader.name,
+        "duration": plPlayerController.duration.value.inSeconds,
+        if (taskData.offlineMedia.coverUrl != null)
+          "cover": taskData.offlineMedia.coverUrl,
+      });
+    } else {
+      videoPlayerServiceHandler.onVideoChange({
+        "id": media.id,
+        "title": media.title,
+        "artist": media.user.name,
+        "duration": plPlayerController.duration.value.inSeconds,
+        if (media.hasCover()) "cover": media.getCoverUrl(),
+      });
+    }
+    videoPlayerServiceHandler.onPositionChange(
+      plPlayerController.position.value,
+    );
+    videoPlayerServiceHandler.onStatusChange(
+      plPlayerController.playerStatus.status.value,
+      plPlayerController.isBuffering.value,
+    );
+  }
+
   Future playerInit({
     String? video,
     String? audio,

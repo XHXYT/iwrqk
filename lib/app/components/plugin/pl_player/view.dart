@@ -11,6 +11,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../data/providers/storage_provider.dart';
+import '../../../data/services/plugin/pl_player/service_locator.dart';
 import 'controller.dart';
 import 'models/duration.dart';
 import 'models/fullscreen_mode.dart';
@@ -68,7 +69,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late FullScreenMode mode;
   late int defaultBtmProgressBehavior;
   late bool enableQuickDouble;
-  late bool enableBackgroundPlay;
   late double screenWidth;
   late final bool _brightnessSupported = !GetPlatform.isLinux;
 
@@ -124,10 +124,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     enableQuickDouble = setting.get(
       PLPlayerConfigKey.enableQuickDouble,
       defaultValue: true,
-    );
-    enableBackgroundPlay = setting.get(
-      PLPlayerConfigKey.enableBackgroundPlay,
-      defaultValue: false,
     );
     Future.microtask(() async {
       try {
@@ -210,7 +206,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           () => Video(
             controller: videoController,
             controls: NoVideoControls,
-            pauseUponEnteringBackgroundMode: !enableBackgroundPlay,
+            pauseUponEnteringBackgroundMode:
+                !videoPlayerServiceHandler.enableBackgroundPlay.value,
             resumeUponEnteringForegroundMode: true,
             fit: c.videoFit.value,
           ),

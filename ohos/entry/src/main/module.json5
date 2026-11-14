@@ -21,6 +21,9 @@
         "label": "$string:EntryAbility_label",
         "startWindowIcon": "$media:app_icon",
         "startWindowBackground": "$color:start_window_background",
+        "backgroundModes": [
+          "audioPlayback"
+        ],
         "exported": true,
         "skills": [
           {
@@ -57,6 +60,16 @@
             "EntryAbility"
           ],
           "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
+        "reason": "$string:keep_background_running_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "always"
         }
       }
     ]

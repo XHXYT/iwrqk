@@ -12,6 +12,7 @@
       "name": "EntryAbility_label",
       "value": "IwrQk"
     },
-    { "name": "media_permission_reason", "value": "用于保存和访问下载的视频、图片文件" }
+    { "name": "media_permission_reason", "value": "用于保存和访问下载的视频、图片文件" },
+    { "name": "keep_background_running_reason", "value": "用于后台继续播放视频音频并保持系统播控可用" }
   ]
 }

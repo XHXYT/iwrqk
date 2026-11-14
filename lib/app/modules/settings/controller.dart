@@ -76,7 +76,7 @@ class SettingsController extends GetxController {
   bool get backgroundPlay => _backgroundPlay.value;
   set backgroundPlay(bool value) {
     _backgroundPlay.value = value;
-    videoPlayerServiceHandler.enableBackgroundPlay = value;
+    videoPlayerServiceHandler.enableBackgroundPlay.value = value;
     StorageProvider.config[PLPlayerConfigKey.enableBackgroundPlay] = value;
   }
 
