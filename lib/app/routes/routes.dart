@@ -24,6 +24,7 @@ abstract class AppRoutes {
 
   static const conversationsPreview = '/conversationsPreview';
   static const conversationDetail = '/conversationDetail';
+  static const notifications = '/notifications';
 
   static const searchResult = '/searchResult';
 

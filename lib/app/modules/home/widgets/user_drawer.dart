@@ -147,6 +147,18 @@ class UserDrawer extends StatelessWidget {
                     ),
                     _buildUserItem(
                       context,
+                      title: t.messages.messages,
+                      icon: const Icon(Icons.mail, size: 24),
+                      routeName: AppRoutes.conversationsPreview,
+                    ),
+                    _buildUserItem(
+                      context,
+                      title: t.notifications.notifications,
+                      icon: const Icon(Icons.notifications, size: 24),
+                      routeName: AppRoutes.notifications,
+                    ),
+                    _buildUserItem(
+                      context,
                       title: t.user.blocked_tags,
                       icon: const Icon(Icons.block, size: 24),
                       routeName: AppRoutes.blockedTags,

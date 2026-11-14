@@ -69,6 +69,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$channel$en channel = Translations$channel$en.internal(_root);
 	late final Translations$create_thread$en create_thread = Translations$create_thread$en.internal(_root);
 	late final Translations$notifications$en notifications = Translations$notifications$en.internal(_root);
+	late final Translations$messages$en messages = Translations$messages$en.internal(_root);
 	late final Translations$settings$en settings = Translations$settings$en.internal(_root);
 	late final Translations$theme$en theme = Translations$theme$en.internal(_root);
 	late final Translations$colors$en colors = Translations$colors$en.internal(_root);
@@ -292,6 +293,21 @@ class Translations$profile$en {
 
 	/// en: 'View more'
 	String get view_more => 'View more';
+
+	/// en: 'Block user'
+	String get block_user => 'Block user';
+
+	/// en: 'Unblock user'
+	String get unblock_user => 'Unblock user';
+
+	/// en: 'Copy profile link'
+	String get copy_profile_link => 'Copy profile link';
+
+	/// en: 'Share profile'
+	String get share_profile => 'Share profile';
+
+	/// en: 'Open in browser'
+	String get open_in_browser => 'Open in browser';
 }
 
 // Path: sort
@@ -755,6 +771,66 @@ class Translations$notifications$en {
 
 	/// en: 'Apply'
 	String get apply => 'Apply';
+
+	/// en: 'Notifications'
+	String get notifications => 'Notifications';
+
+	/// en: 'Notification'
+	String get default_notification => 'Notification';
+
+	/// en: 'Mark all as read'
+	String get mark_all_read => 'Mark all as read';
+
+	/// en: '$user posted a new comment on $item'
+	String new_comment({required Object user, required Object item}) => '${user} posted a new comment on ${item}';
+
+	/// en: '$user replied to your comment on $item'
+	String new_reply({required Object user, required Object item}) => '${user} replied to your comment on ${item}';
+
+	/// en: 'Your video $item is now published'
+	String video_ready({required Object item}) => 'Your video ${item} is now published';
+
+	/// en: 'Your suggested tag $item has been approved'
+	String tag_approved({required Object item}) => 'Your suggested tag ${item} has been approved';
+
+	/// en: 'You have joined the Creator Program'
+	String get joined_creator_program => 'You have joined the Creator Program';
+
+	/// en: 'You received a warning'
+	String get warning => 'You received a warning';
+
+	/// en: 'Your content was approved'
+	String get review_approved => 'Your content was approved';
+
+	/// en: 'Your content was rejected'
+	String get review_rejected => 'Your content was rejected';
+}
+
+// Path: messages
+class Translations$messages$en {
+	Translations$messages$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Messages'
+	String get messages => 'Messages';
+
+	/// en: 'Type a message'
+	String get type_message => 'Type a message';
+
+	/// en: 'Send'
+	String get send => 'Send';
+
+	/// en: 'Title'
+	String get title => 'Title';
+
+	/// en: 'Message'
+	String get message_body => 'Message';
+
+	/// en: 'Title and message cannot be empty'
+	String get title_or_body_empty => 'Title and message cannot be empty';
 }
 
 // Path: settings
@@ -1046,6 +1122,12 @@ class Translations$message$en {
 
 	/// en: 'Restart the App to apply the changes.'
 	String get restart_required => 'Restart the App to apply the changes.';
+
+	/// en: 'Copied to clipboard.'
+	String get copied_to_clipboard => 'Copied to clipboard.';
+
+	/// en: 'Are you sure you want to block this user?'
+	String get block_user_confirm => 'Are you sure you want to block this user?';
 
 	/// en: 'Please type the host'
 	String get please_type_host => 'Please type the host';
@@ -1367,6 +1449,11 @@ extension on Translations {
 			'profile.message' => 'Message',
 			'profile.guestbook' => 'Guestbook',
 			'profile.view_more' => 'View more',
+			'profile.block_user' => 'Block user',
+			'profile.unblock_user' => 'Unblock user',
+			'profile.copy_profile_link' => 'Copy profile link',
+			'profile.share_profile' => 'Share profile',
+			'profile.open_in_browser' => 'Open in browser',
 			'sort.latest' => 'Latest',
 			'sort.trending' => 'Trending',
 			'sort.popularity' => 'Popularity',
@@ -1482,6 +1569,23 @@ extension on Translations {
 			'notifications.cancel' => 'Cancel',
 			'notifications.confirm' => 'Confirm',
 			'notifications.apply' => 'Apply',
+			'notifications.notifications' => 'Notifications',
+			'notifications.default_notification' => 'Notification',
+			'notifications.mark_all_read' => 'Mark all as read',
+			'notifications.new_comment' => ({required Object user, required Object item}) => '${user} posted a new comment on ${item}',
+			'notifications.new_reply' => ({required Object user, required Object item}) => '${user} replied to your comment on ${item}',
+			'notifications.video_ready' => ({required Object item}) => 'Your video ${item} is now published',
+			'notifications.tag_approved' => ({required Object item}) => 'Your suggested tag ${item} has been approved',
+			'notifications.joined_creator_program' => 'You have joined the Creator Program',
+			'notifications.warning' => 'You received a warning',
+			'notifications.review_approved' => 'Your content was approved',
+			'notifications.review_rejected' => 'Your content was rejected',
+			'messages.messages' => 'Messages',
+			'messages.type_message' => 'Type a message',
+			'messages.send' => 'Send',
+			'messages.title' => 'Title',
+			'messages.message_body' => 'Message',
+			'messages.title_or_body_empty' => 'Title and message cannot be empty',
 			'settings.appearance' => 'Appearance',
 			'settings.theme' => 'Theme',
 			'settings.theme_desc' => 'Change the theme of the App',
@@ -1561,6 +1665,8 @@ extension on Translations {
 			'message.exit_app' => 'Press again to exit the App',
 			'message.are_you_sure_to_do_that' => 'Are you sure to do that?',
 			'message.restart_required' => 'Restart the App to apply the changes.',
+			'message.copied_to_clipboard' => 'Copied to clipboard.',
+			'message.block_user_confirm' => 'Are you sure you want to block this user?',
 			'message.please_type_host' => 'Please type the host',
 			'message.please_type_port' => 'Please type the port',
 			'message.account.login_success' => 'Login success.',

@@ -61,6 +61,7 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$channel$ja channel = _Translations$channel$ja._(_root);
 	@override late final _Translations$create_thread$ja create_thread = _Translations$create_thread$ja._(_root);
 	@override late final _Translations$notifications$ja notifications = _Translations$notifications$ja._(_root);
+	@override late final _Translations$messages$ja messages = _Translations$messages$ja._(_root);
 	@override late final _Translations$settings$ja settings = _Translations$settings$ja._(_root);
 	@override late final _Translations$theme$ja theme = _Translations$theme$ja._(_root);
 	@override late final _Translations$colors$ja colors = _Translations$colors$ja._(_root);
@@ -182,6 +183,11 @@ class _Translations$profile$ja extends Translations$profile$en {
 	@override String get message => 'メッセージ';
 	@override String get guestbook => 'ゲストブック';
 	@override String get view_more => 'もっと見る';
+	@override String get block_user => 'ユーザーをブロック';
+	@override String get unblock_user => 'ブロック解除';
+	@override String get copy_profile_link => 'プロフィールリンクをコピー';
+	@override String get share_profile => 'プロフィールを共有';
+	@override String get open_in_browser => 'ブラウザで開く';
 }
 
 // Path: sort
@@ -427,6 +433,32 @@ class _Translations$notifications$ja extends Translations$notifications$en {
 	@override String get cancel => 'キャンセル';
 	@override String get confirm => '確認';
 	@override String get apply => '適用';
+	@override String get notifications => '通知';
+	@override String get default_notification => '通知';
+	@override String get mark_all_read => 'すべて既読にする';
+	@override String new_comment({required Object user, required Object item}) => '${user} が ${item} に新しいコメントをしました';
+	@override String new_reply({required Object user, required Object item}) => '${user} が ${item} のあなたのコメントに返信しました';
+	@override String video_ready({required Object item}) => 'あなたの動画 ${item} が公開されました';
+	@override String tag_approved({required Object item}) => '提案したタグ ${item} が承認されました';
+	@override String get joined_creator_program => 'クリエイタープログラムに参加しました';
+	@override String get warning => '警告を受け取りました';
+	@override String get review_approved => 'コンテンツが承認されました';
+	@override String get review_rejected => 'コンテンツが拒否されました';
+}
+
+// Path: messages
+class _Translations$messages$ja extends Translations$messages$en {
+	_Translations$messages$ja._(TranslationsJa root) : this._root = root, super.internal(root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get messages => 'メッセージ';
+	@override String get type_message => 'メッセージを入力';
+	@override String get send => '送信';
+	@override String get title => 'タイトル';
+	@override String get message_body => 'メッセージ本文';
+	@override String get title_or_body_empty => 'タイトルと本文を入力してください';
 }
 
 // Path: settings
@@ -560,6 +592,8 @@ class _Translations$message$ja extends Translations$message$en {
 	@override String get exit_app => 'アプリを終了するにはもう一度押してください';
 	@override String get are_you_sure_to_do_that => 'それを行うことを確認していますか？';
 	@override String get restart_required => '再起動後に有効';
+	@override String get copied_to_clipboard => 'クリップボードにコピーしました。';
+	@override String get block_user_confirm => 'このユーザーをブロックしますか？';
 	@override String get please_type_host => 'ホスト名を入力してください';
 	@override String get please_type_port => 'ポートを入力してください';
 	@override late final _Translations$message$account$ja account = _Translations$message$account$ja._(_root);
@@ -777,6 +811,11 @@ extension on TranslationsJa {
 			'profile.message' => 'メッセージ',
 			'profile.guestbook' => 'ゲストブック',
 			'profile.view_more' => 'もっと見る',
+			'profile.block_user' => 'ユーザーをブロック',
+			'profile.unblock_user' => 'ブロック解除',
+			'profile.copy_profile_link' => 'プロフィールリンクをコピー',
+			'profile.share_profile' => 'プロフィールを共有',
+			'profile.open_in_browser' => 'ブラウザで開く',
 			'sort.latest' => '最新',
 			'sort.trending' => 'トレンド',
 			'sort.popularity' => '人気順',
@@ -892,6 +931,23 @@ extension on TranslationsJa {
 			'notifications.cancel' => 'キャンセル',
 			'notifications.confirm' => '確認',
 			'notifications.apply' => '適用',
+			'notifications.notifications' => '通知',
+			'notifications.default_notification' => '通知',
+			'notifications.mark_all_read' => 'すべて既読にする',
+			'notifications.new_comment' => ({required Object user, required Object item}) => '${user} が ${item} に新しいコメントをしました',
+			'notifications.new_reply' => ({required Object user, required Object item}) => '${user} が ${item} のあなたのコメントに返信しました',
+			'notifications.video_ready' => ({required Object item}) => 'あなたの動画 ${item} が公開されました',
+			'notifications.tag_approved' => ({required Object item}) => '提案したタグ ${item} が承認されました',
+			'notifications.joined_creator_program' => 'クリエイタープログラムに参加しました',
+			'notifications.warning' => '警告を受け取りました',
+			'notifications.review_approved' => 'コンテンツが承認されました',
+			'notifications.review_rejected' => 'コンテンツが拒否されました',
+			'messages.messages' => 'メッセージ',
+			'messages.type_message' => 'メッセージを入力',
+			'messages.send' => '送信',
+			'messages.title' => 'タイトル',
+			'messages.message_body' => 'メッセージ本文',
+			'messages.title_or_body_empty' => 'タイトルと本文を入力してください',
 			'settings.appearance' => '外観設定',
 			'settings.theme' => 'テーマ',
 			'settings.theme_desc' => 'アプリのテーマを設定します',
@@ -971,6 +1027,8 @@ extension on TranslationsJa {
 			'message.exit_app' => 'アプリを終了するにはもう一度押してください',
 			'message.are_you_sure_to_do_that' => 'それを行うことを確認していますか？',
 			'message.restart_required' => '再起動後に有効',
+			'message.copied_to_clipboard' => 'クリップボードにコピーしました。',
+			'message.block_user_confirm' => 'このユーザーをブロックしますか？',
 			'message.please_type_host' => 'ホスト名を入力してください',
 			'message.please_type_port' => 'ポートを入力してください',
 			'message.account.login_success' => 'ログイン成功！',

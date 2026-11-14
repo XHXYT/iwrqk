@@ -62,7 +62,12 @@
     "online": "在線上",
     "message": "私訊",
     "guestbook": "留言板",
-    "view_more": "查看更多"
+    "view_more": "查看更多",
+    "block_user": "封鎖使用者",
+    "unblock_user": "取消封鎖",
+    "copy_profile_link": "複製主頁連結",
+    "share_profile": "分享主頁",
+    "open_in_browser": "瀏覽器開啟"
   },
   "sort": {
     "latest": "最新",
@@ -211,7 +216,26 @@
     "loading": "載入中...",
     "cancel": "取消",
     "confirm": "確認",
-    "apply": "應用"
+    "apply": "應用",
+    "notifications": "通知",
+    "default_notification": "通知",
+    "mark_all_read": "全部標記為已讀",
+    "new_comment": "$user 在 $item 發表了新評論",
+    "new_reply": "$user 回覆了你在 $item 的評論",
+    "video_ready": "你的影片 $item 已發佈",
+    "tag_approved": "你建議的標籤 $item 已獲批准",
+    "joined_creator_program": "你已加入創作者計劃",
+    "warning": "你收到了一條警告",
+    "review_approved": "你的內容已通過審核",
+    "review_rejected": "你的內容未通過審核"
+  },
+  "messages": {
+    "messages": "訊息",
+    "type_message": "輸入訊息",
+    "send": "傳送",
+    "title": "標題",
+    "message_body": "訊息內容",
+    "title_or_body_empty": "標題和訊息內容不能為空"
   },
   "settings": {
     "appearance": "外觀設定",
@@ -303,6 +327,8 @@
     "exit_app": "再按一次退出該軟體",
     "are_you_sure_to_do_that": "你確定要這麼做嗎？",
     "restart_required": "重啟後生效",
+    "copied_to_clipboard": "已複製到剪貼簿。",
+    "block_user_confirm": "確定要封鎖該使用者嗎？",
     "please_type_host": "請輸入主機名",
     "please_type_port": "請輸入端口",
     "account": {

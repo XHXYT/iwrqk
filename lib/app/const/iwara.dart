@@ -8,6 +8,7 @@ class IwaraConst {
 
   static const videoPageUrl = "https://www.iwara.tv/video/{id}";
   static const imagePageUrl = "https://www.iwara.tv/image/{id}";
+  static const profilePageUrl = "https://www.iwara.tv/profile/{username}";
 
   static const defaultAvatarUrl =
       "https://www.iwara.tv/images/default-avatar.jpg";

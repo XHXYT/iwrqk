@@ -25,6 +25,12 @@ import '../modules/home/binding.dart';
 import '../modules/home/page.dart';
 import '../modules/media_detail/binding.dart';
 import '../modules/media_detail/page.dart';
+import '../modules/messages/conversation_detail/binding.dart';
+import '../modules/messages/conversation_detail/page.dart';
+import '../modules/messages/conversations_preview/binding.dart';
+import '../modules/messages/conversations_preview/page.dart';
+import '../modules/messages/notifications/binding.dart';
+import '../modules/messages/notifications/page.dart';
 import '../modules/playlists/playlist_detail/binding.dart';
 import '../modules/playlists/playlist_detail/page.dart';
 import '../modules/playlists/playlists_preview/binding.dart';
@@ -152,6 +158,21 @@ abstract class AppPages {
       name: AppRoutes.favorites,
       page: () => const FavoritesPage(),
       binding: FavoritesBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.conversationsPreview,
+      page: () => const ConversationsPreviewPage(),
+      binding: ConversationsPreviewBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.conversationDetail,
+      page: () => const ConversationDetailPage(),
+      binding: ConversationDetailBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.notifications,
+      page: () => const NotificationsPage(),
+      binding: NotificationsBinding(),
     ),
   ];
 }

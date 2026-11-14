@@ -61,6 +61,7 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 	@override late final Translations$channel$zh_TW channel = Translations$channel$zh_TW.internal(_root);
 	@override late final Translations$create_thread$zh_TW create_thread = Translations$create_thread$zh_TW.internal(_root);
 	@override late final Translations$notifications$zh_TW notifications = Translations$notifications$zh_TW.internal(_root);
+	@override late final Translations$messages$zh_TW messages = Translations$messages$zh_TW.internal(_root);
 	@override late final Translations$settings$zh_TW settings = Translations$settings$zh_TW.internal(_root);
 	@override late final Translations$theme$zh_TW theme = Translations$theme$zh_TW.internal(_root);
 	@override late final Translations$colors$zh_TW colors = Translations$colors$zh_TW.internal(_root);
@@ -182,6 +183,11 @@ class Translations$profile$zh_TW extends Translations$profile$en {
 	@override String get message => '私訊';
 	@override String get guestbook => '留言板';
 	@override String get view_more => '查看更多';
+	@override String get block_user => '封鎖使用者';
+	@override String get unblock_user => '取消封鎖';
+	@override String get copy_profile_link => '複製主頁連結';
+	@override String get share_profile => '分享主頁';
+	@override String get open_in_browser => '瀏覽器開啟';
 }
 
 // Path: sort
@@ -427,6 +433,32 @@ class Translations$notifications$zh_TW extends Translations$notifications$en {
 	@override String get cancel => '取消';
 	@override String get confirm => '確認';
 	@override String get apply => '應用';
+	@override String get notifications => '通知';
+	@override String get default_notification => '通知';
+	@override String get mark_all_read => '全部標記為已讀';
+	@override String new_comment({required Object user, required Object item}) => '${user} 在 ${item} 發表了新評論';
+	@override String new_reply({required Object user, required Object item}) => '${user} 回覆了你在 ${item} 的評論';
+	@override String video_ready({required Object item}) => '你的影片 ${item} 已發佈';
+	@override String tag_approved({required Object item}) => '你建議的標籤 ${item} 已獲批准';
+	@override String get joined_creator_program => '你已加入創作者計劃';
+	@override String get warning => '你收到了一條警告';
+	@override String get review_approved => '你的內容已通過審核';
+	@override String get review_rejected => '你的內容未通過審核';
+}
+
+// Path: messages
+class Translations$messages$zh_TW extends Translations$messages$en {
+	Translations$messages$zh_TW.internal(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get messages => '訊息';
+	@override String get type_message => '輸入訊息';
+	@override String get send => '傳送';
+	@override String get title => '標題';
+	@override String get message_body => '訊息內容';
+	@override String get title_or_body_empty => '標題和訊息內容不能為空';
 }
 
 // Path: settings
@@ -560,6 +592,8 @@ class Translations$message$zh_TW extends Translations$message$en {
 	@override String get exit_app => '再按一次退出該軟體';
 	@override String get are_you_sure_to_do_that => '你確定要這麼做嗎？';
 	@override String get restart_required => '重啟後生效';
+	@override String get copied_to_clipboard => '已複製到剪貼簿。';
+	@override String get block_user_confirm => '確定要封鎖該使用者嗎？';
 	@override String get please_type_host => '請輸入主機名';
 	@override String get please_type_port => '請輸入端口';
 	@override late final Translations$message$account$zh_TW account = Translations$message$account$zh_TW.internal(_root);
@@ -777,6 +811,11 @@ extension on TranslationsZhTw {
 			'profile.message' => '私訊',
 			'profile.guestbook' => '留言板',
 			'profile.view_more' => '查看更多',
+			'profile.block_user' => '封鎖使用者',
+			'profile.unblock_user' => '取消封鎖',
+			'profile.copy_profile_link' => '複製主頁連結',
+			'profile.share_profile' => '分享主頁',
+			'profile.open_in_browser' => '瀏覽器開啟',
 			'sort.latest' => '最新',
 			'sort.trending' => '趨勢',
 			'sort.popularity' => '熱門',
@@ -892,6 +931,23 @@ extension on TranslationsZhTw {
 			'notifications.cancel' => '取消',
 			'notifications.confirm' => '確認',
 			'notifications.apply' => '應用',
+			'notifications.notifications' => '通知',
+			'notifications.default_notification' => '通知',
+			'notifications.mark_all_read' => '全部標記為已讀',
+			'notifications.new_comment' => ({required Object user, required Object item}) => '${user} 在 ${item} 發表了新評論',
+			'notifications.new_reply' => ({required Object user, required Object item}) => '${user} 回覆了你在 ${item} 的評論',
+			'notifications.video_ready' => ({required Object item}) => '你的影片 ${item} 已發佈',
+			'notifications.tag_approved' => ({required Object item}) => '你建議的標籤 ${item} 已獲批准',
+			'notifications.joined_creator_program' => '你已加入創作者計劃',
+			'notifications.warning' => '你收到了一條警告',
+			'notifications.review_approved' => '你的內容已通過審核',
+			'notifications.review_rejected' => '你的內容未通過審核',
+			'messages.messages' => '訊息',
+			'messages.type_message' => '輸入訊息',
+			'messages.send' => '傳送',
+			'messages.title' => '標題',
+			'messages.message_body' => '訊息內容',
+			'messages.title_or_body_empty' => '標題和訊息內容不能為空',
 			'settings.appearance' => '外觀設定',
 			'settings.theme' => '主題',
 			'settings.theme_desc' => '設定該軟體的主題',
@@ -971,6 +1027,8 @@ extension on TranslationsZhTw {
 			'message.exit_app' => '再按一次退出該軟體',
 			'message.are_you_sure_to_do_that' => '你確定要這麼做嗎？',
 			'message.restart_required' => '重啟後生效',
+			'message.copied_to_clipboard' => '已複製到剪貼簿。',
+			'message.block_user_confirm' => '確定要封鎖該使用者嗎？',
 			'message.please_type_host' => '請輸入主機名',
 			'message.please_type_port' => '請輸入端口',
 			'message.account.login_success' => '登入成功！',

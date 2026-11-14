@@ -61,6 +61,7 @@ class TranslationsZhCn extends Translations with BaseTranslations<AppLocale, Tra
 	@override late final Translations$channel$zh_CN channel = Translations$channel$zh_CN.internal(_root);
 	@override late final Translations$create_thread$zh_CN create_thread = Translations$create_thread$zh_CN.internal(_root);
 	@override late final Translations$notifications$zh_CN notifications = Translations$notifications$zh_CN.internal(_root);
+	@override late final Translations$messages$zh_CN messages = Translations$messages$zh_CN.internal(_root);
 	@override late final Translations$settings$zh_CN settings = Translations$settings$zh_CN.internal(_root);
 	@override late final Translations$theme$zh_CN theme = Translations$theme$zh_CN.internal(_root);
 	@override late final Translations$colors$zh_CN colors = Translations$colors$zh_CN.internal(_root);
@@ -182,6 +183,11 @@ class Translations$profile$zh_CN extends Translations$profile$en {
 	@override String get message => '私信';
 	@override String get guestbook => '留言板';
 	@override String get view_more => '查看更多';
+	@override String get block_user => '拉黑用户';
+	@override String get unblock_user => '取消拉黑';
+	@override String get copy_profile_link => '复制主页链接';
+	@override String get share_profile => '分享主页';
+	@override String get open_in_browser => '浏览器打开';
 }
 
 // Path: sort
@@ -427,6 +433,32 @@ class Translations$notifications$zh_CN extends Translations$notifications$en {
 	@override String get cancel => '取消';
 	@override String get confirm => '确认';
 	@override String get apply => '应用';
+	@override String get notifications => '通知';
+	@override String get default_notification => '通知';
+	@override String get mark_all_read => '全部标记为已读';
+	@override String new_comment({required Object user, required Object item}) => '${user} 在 ${item} 发表了新评论';
+	@override String new_reply({required Object user, required Object item}) => '${user} 回复了你在 ${item} 的评论';
+	@override String video_ready({required Object item}) => '你的视频 ${item} 已发布';
+	@override String tag_approved({required Object item}) => '你建议的标签 ${item} 已获批准';
+	@override String get joined_creator_program => '你已加入创作者计划';
+	@override String get warning => '你收到了一条警告';
+	@override String get review_approved => '你的内容已通过审核';
+	@override String get review_rejected => '你的内容未通过审核';
+}
+
+// Path: messages
+class Translations$messages$zh_CN extends Translations$messages$en {
+	Translations$messages$zh_CN.internal(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get messages => '私信';
+	@override String get type_message => '输入消息';
+	@override String get send => '发送';
+	@override String get title => '标题';
+	@override String get message_body => '消息内容';
+	@override String get title_or_body_empty => '标题和消息内容不能为空';
 }
 
 // Path: settings
@@ -560,6 +592,8 @@ class Translations$message$zh_CN extends Translations$message$en {
 	@override String get exit_app => '再按一次退出应用';
 	@override String get are_you_sure_to_do_that => '你确定要这么做吗？';
 	@override String get restart_required => '重启后生效';
+	@override String get copied_to_clipboard => '已复制到剪贴板。';
+	@override String get block_user_confirm => '确定要拉黑该用户吗？';
 	@override String get please_type_host => '请输入主机名';
 	@override String get please_type_port => '请输入端口';
 	@override late final Translations$message$account$zh_CN account = Translations$message$account$zh_CN.internal(_root);
@@ -777,6 +811,11 @@ extension on TranslationsZhCn {
 			'profile.message' => '私信',
 			'profile.guestbook' => '留言板',
 			'profile.view_more' => '查看更多',
+			'profile.block_user' => '拉黑用户',
+			'profile.unblock_user' => '取消拉黑',
+			'profile.copy_profile_link' => '复制主页链接',
+			'profile.share_profile' => '分享主页',
+			'profile.open_in_browser' => '浏览器打开',
 			'sort.latest' => '最新',
 			'sort.trending' => '流行',
 			'sort.popularity' => '人气',
@@ -892,6 +931,23 @@ extension on TranslationsZhCn {
 			'notifications.cancel' => '取消',
 			'notifications.confirm' => '确认',
 			'notifications.apply' => '应用',
+			'notifications.notifications' => '通知',
+			'notifications.default_notification' => '通知',
+			'notifications.mark_all_read' => '全部标记为已读',
+			'notifications.new_comment' => ({required Object user, required Object item}) => '${user} 在 ${item} 发表了新评论',
+			'notifications.new_reply' => ({required Object user, required Object item}) => '${user} 回复了你在 ${item} 的评论',
+			'notifications.video_ready' => ({required Object item}) => '你的视频 ${item} 已发布',
+			'notifications.tag_approved' => ({required Object item}) => '你建议的标签 ${item} 已获批准',
+			'notifications.joined_creator_program' => '你已加入创作者计划',
+			'notifications.warning' => '你收到了一条警告',
+			'notifications.review_approved' => '你的内容已通过审核',
+			'notifications.review_rejected' => '你的内容未通过审核',
+			'messages.messages' => '私信',
+			'messages.type_message' => '输入消息',
+			'messages.send' => '发送',
+			'messages.title' => '标题',
+			'messages.message_body' => '消息内容',
+			'messages.title_or_body_empty' => '标题和消息内容不能为空',
 			'settings.appearance' => '外观设置',
 			'settings.theme' => '主题',
 			'settings.theme_desc' => '设置应用的主题',
@@ -971,6 +1027,8 @@ extension on TranslationsZhCn {
 			'message.exit_app' => '再按一次退出应用',
 			'message.are_you_sure_to_do_that' => '你确定要这么做吗？',
 			'message.restart_required' => '重启后生效',
+			'message.copied_to_clipboard' => '已复制到剪贴板。',
+			'message.block_user_confirm' => '确定要拉黑该用户吗？',
 			'message.please_type_host' => '请输入主机名',
 			'message.please_type_port' => '请输入端口',
 			'message.account.login_success' => '登入成功！',

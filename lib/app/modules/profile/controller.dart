@@ -5,6 +5,7 @@ import '../../data/enums/types.dart';
 import '../../data/models/media/media.dart';
 import '../../data/models/profile.dart';
 import '../../data/providers/api_provider.dart';
+import '../../data/services/account_service.dart';
 import '../../data/services/config_service.dart';
 import '../../data/services/user_service.dart';
 
@@ -17,6 +18,8 @@ class ProfileController extends GetxController
   late ProfileModel profile;
   late int followingNum;
   late int followersNum;
+
+  final RxBool isUserBlocked = false.obs;
 
   late GroupResult<MediaModel> popularVideos;
   late GroupResult<MediaModel> popularImages;
@@ -91,6 +94,33 @@ class ProfileController extends GetxController
       change(null, status: RxStatus.success());
 
       fetchWorksPreview();
+      fetchUserBlockStatus();
+    }
+  }
+
+  Future<void> fetchUserBlockStatus() async {
+    final accountService = Get.find<AccountService>();
+    if (!accountService.isLogin) {
+      return;
+    }
+    if (userService.user != null &&
+        userService.user!.id == profileModel!.user!.id) {
+      return;
+    }
+    isUserBlocked.value = await userService.getUserBlockStatus(
+      profileModel!.user!.id,
+    );
+  }
+
+  Future<void> toggleBlockUser() async {
+    bool success;
+    if (isUserBlocked.value) {
+      success = await userService.unblockUser(profileModel!.user!.id);
+    } else {
+      success = await userService.blockUser(profileModel!.user!.id);
+    }
+    if (success) {
+      isUserBlocked.value = !isUserBlocked.value;
     }
   }
 

@@ -62,7 +62,12 @@
     "online": "在线",
     "message": "私信",
     "guestbook": "留言板",
-    "view_more": "查看更多"
+    "view_more": "查看更多",
+    "block_user": "拉黑用户",
+    "unblock_user": "取消拉黑",
+    "copy_profile_link": "复制主页链接",
+    "share_profile": "分享主页",
+    "open_in_browser": "浏览器打开"
   },
   "sort": {
     "latest": "最新",
@@ -211,7 +216,26 @@
     "loading": "加载中...",
     "cancel": "取消",
     "confirm": "确认",
-    "apply": "应用"
+    "apply": "应用",
+    "notifications": "通知",
+    "default_notification": "通知",
+    "mark_all_read": "全部标记为已读",
+    "new_comment": "$user 在 $item 发表了新评论",
+    "new_reply": "$user 回复了你在 $item 的评论",
+    "video_ready": "你的视频 $item 已发布",
+    "tag_approved": "你建议的标签 $item 已获批准",
+    "joined_creator_program": "你已加入创作者计划",
+    "warning": "你收到了一条警告",
+    "review_approved": "你的内容已通过审核",
+    "review_rejected": "你的内容未通过审核"
+  },
+  "messages": {
+    "messages": "私信",
+    "type_message": "输入消息",
+    "send": "发送",
+    "title": "标题",
+    "message_body": "消息内容",
+    "title_or_body_empty": "标题和消息内容不能为空"
   },
   "settings": {
     "appearance": "外观设置",
@@ -303,6 +327,8 @@
     "exit_app": "再按一次退出应用",
     "are_you_sure_to_do_that": "你确定要这么做吗？",
     "restart_required": "重启后生效",
+    "copied_to_clipboard": "已复制到剪贴板。",
+    "block_user_confirm": "确定要拉黑该用户吗？",
     "please_type_host": "请输入主机名",
     "please_type_port": "请输入端口",
     "account": {

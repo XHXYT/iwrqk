@@ -62,7 +62,12 @@
     "online": "オンライン",
     "message": "メッセージ",
     "guestbook": "ゲストブック",
-    "view_more": "もっと見る"
+    "view_more": "もっと見る",
+    "block_user": "ユーザーをブロック",
+    "unblock_user": "ブロック解除",
+    "copy_profile_link": "プロフィールリンクをコピー",
+    "share_profile": "プロフィールを共有",
+    "open_in_browser": "ブラウザで開く"
   },
   "sort": {
     "latest": "最新",
@@ -211,7 +216,26 @@
     "loading": "読み込み中...",
     "cancel": "キャンセル",
     "confirm": "確認",
-    "apply": "適用"
+    "apply": "適用",
+    "notifications": "通知",
+    "default_notification": "通知",
+    "mark_all_read": "すべて既読にする",
+    "new_comment": "$user が $item に新しいコメントをしました",
+    "new_reply": "$user が $item のあなたのコメントに返信しました",
+    "video_ready": "あなたの動画 $item が公開されました",
+    "tag_approved": "提案したタグ $item が承認されました",
+    "joined_creator_program": "クリエイタープログラムに参加しました",
+    "warning": "警告を受け取りました",
+    "review_approved": "コンテンツが承認されました",
+    "review_rejected": "コンテンツが拒否されました"
+  },
+  "messages": {
+    "messages": "メッセージ",
+    "type_message": "メッセージを入力",
+    "send": "送信",
+    "title": "タイトル",
+    "message_body": "メッセージ本文",
+    "title_or_body_empty": "タイトルと本文を入力してください"
   },
   "settings": {
     "appearance": "外観設定",
@@ -303,6 +327,8 @@
     "exit_app": "アプリを終了するにはもう一度押してください",
     "are_you_sure_to_do_that": "それを行うことを確認していますか？",
     "restart_required": "再起動後に有効",
+    "copied_to_clipboard": "クリップボードにコピーしました。",
+    "block_user_confirm": "このユーザーをブロックしますか？",
     "please_type_host": "ホスト名を入力してください",
     "please_type_port": "ポートを入力してください",
     "account": {

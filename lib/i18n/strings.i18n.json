@@ -68,7 +68,12 @@
     "online": "Online",
     "message": "Message",
     "guestbook": "Guestbook",
-    "view_more": "View more"
+    "view_more": "View more",
+    "block_user": "Block user",
+    "unblock_user": "Unblock user",
+    "copy_profile_link": "Copy profile link",
+    "share_profile": "Share profile",
+    "open_in_browser": "Open in browser"
   },
   "sort": {
     "latest": "Latest",
@@ -217,7 +222,26 @@
     "loading": "Loading...",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "apply": "Apply"
+    "apply": "Apply",
+    "notifications": "Notifications",
+    "default_notification": "Notification",
+    "mark_all_read": "Mark all as read",
+    "new_comment": "$user posted a new comment on $item",
+    "new_reply": "$user replied to your comment on $item",
+    "video_ready": "Your video $item is now published",
+    "tag_approved": "Your suggested tag $item has been approved",
+    "joined_creator_program": "You have joined the Creator Program",
+    "warning": "You received a warning",
+    "review_approved": "Your content was approved",
+    "review_rejected": "Your content was rejected"
+  },
+  "messages": {
+    "messages": "Messages",
+    "type_message": "Type a message",
+    "send": "Send",
+    "title": "Title",
+    "message_body": "Message",
+    "title_or_body_empty": "Title and message cannot be empty"
   },
   "settings": {
     "appearance": "Appearance",
@@ -309,6 +333,8 @@
     "exit_app": "Press again to exit the App",
     "are_you_sure_to_do_that": "Are you sure to do that?",
     "restart_required": "Restart the App to apply the changes.",
+    "copied_to_clipboard": "Copied to clipboard.",
+    "block_user_confirm": "Are you sure you want to block this user?",
     "please_type_host": "Please type the host",
     "please_type_port": "Please type the port",
     "account": {

@@ -11,6 +11,7 @@ import '../models/account/conversations/conversation.dart';
 import '../models/account/conversations/message.dart';
 import '../models/account/friend_request.dart';
 import '../models/account/notifications/counts.dart';
+import '../models/account/notifications/notification.dart';
 import '../models/app_user.dart';
 import '../models/comment.dart';
 import '../models/forum/channel.dart';
@@ -313,14 +314,70 @@ class ApiProvider {
     );
   }
 
-  static Future<ApiResult<void>> sendMessage({
+  static Future<ApiResult<MessageModel>> sendMessage({
     required String conversationId,
     required String content,
   }) async {
     String? message;
+    MessageModel? sentMessage;
 
     await networkProvider
         .post("/conversation/$conversationId/messages", data: {"body": content})
+        .then((value) {
+          if (value.data["message"] != null) {
+            message = value.data["message"];
+          } else {
+            sentMessage = MessageModel.fromJson(value.data);
+          }
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(
+      data: sentMessage,
+      success: message == null,
+      message: message,
+    );
+  }
+
+  static Future<ApiResult<GroupResult<NotificationItemModel>>> getNotifications(
+    String userId,
+    int pageNum,
+  ) async {
+    String? message;
+    List<NotificationItemModel> notifications = [];
+    int count = 0;
+    await networkProvider
+        .get("/user/$userId/notifications", queryParameters: {"page": pageNum})
+        .then((value) {
+          if (value.data["message"] != null) {
+            message = value.data["message"];
+          } else {
+            count = value.data["count"];
+            for (var notification in value.data["results"]) {
+              notifications.add(
+                NotificationItemModel.fromJson(notification),
+              );
+            }
+          }
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(
+      data: GroupResult(results: notifications, count: count),
+      success: message == null,
+      message: message,
+    );
+  }
+
+  static Future<ApiResult<void>> readNotification(String notificationId) async {
+    String? message;
+
+    await networkProvider
+        .post("/notifications/$notificationId/read")
         .then((value) {
           message = value.data["message"];
         })
@@ -329,6 +386,53 @@ class ApiProvider {
         });
 
     return ApiResult(data: null, success: message == null, message: message);
+  }
+
+  static Future<ApiResult<void>> readAllNotifications() async {
+    String? message;
+
+    await networkProvider
+        .post("/notifications/all/read")
+        .then((value) {
+          message = value.data["message"];
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(data: null, success: message == null, message: message);
+  }
+
+  static Future<ApiResult<ConversationModel>> createConversation({
+    required String userId,
+    required String title,
+    required String body,
+  }) async {
+    String? message;
+    ConversationModel? conversation;
+
+    await networkProvider
+        .post("/user/$userId/conversations", data: {
+          "user": userId,
+          "title": title,
+          "body": body,
+        })
+        .then((value) {
+          if (value.data["message"] != null) {
+            message = value.data["message"];
+          } else {
+            conversation = ConversationModel.fromJson(value.data);
+          }
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(
+      data: conversation,
+      success: message == null,
+      message: message,
+    );
   }
 
   static Future<ApiResult<ProfileModel>> getProfile(String userName) async {
@@ -1070,6 +1174,69 @@ class ApiProvider {
         .delete("/user/$userId/followers")
         .then((value) {
           if (value.data != null && value.data is Map) {
+            message = value.data["message"];
+          }
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(data: null, success: message == null, message: message);
+  }
+
+  static Future<ApiResult<bool>> getUserBlockStatus({
+    required String userId,
+  }) async {
+    bool blocked = false;
+    String? message;
+
+    await networkProvider
+        .get("/user/$userId/block")
+        .then((value) {
+          if (value.data == true) {
+            blocked = true;
+          } else if (value.data is String &&
+              value.data.toLowerCase() == "true") {
+            blocked = true;
+          } else if (value.data is Map && value.data["blocked"] == true) {
+            blocked = true;
+          }
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(
+      data: blocked,
+      success: message == null,
+      message: message,
+    );
+  }
+
+  static Future<ApiResult<void>> blockUser({required String userId}) async {
+    String? message;
+
+    await networkProvider
+        .post("/user/$userId/block")
+        .then((value) {
+          if (value.data is Map) {
+            message = value.data["message"];
+          }
+        })
+        .catchError((e, stackTrace) {
+          message = e.toString();
+        });
+
+    return ApiResult(data: null, success: message == null, message: message);
+  }
+
+  static Future<ApiResult<void>> unblockUser({required String userId}) async {
+    String? message;
+
+    await networkProvider
+        .delete("/user/$userId/block")
+        .then((value) {
+          if (value.data is Map) {
             message = value.data["message"];
           }
         })

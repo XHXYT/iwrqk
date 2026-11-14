@@ -5,7 +5,9 @@ import 'package:iwrqk/i18n/strings.g.dart';
 import '../enums/result.dart';
 import '../enums/types.dart';
 import '../models/account/conversations/conversation.dart';
+import '../models/account/conversations/message.dart';
 import '../models/account/notifications/counts.dart';
+import '../models/account/notifications/notification.dart';
 import '../models/account/notifications/settings.dart';
 import '../models/playlist/light_playlist.dart';
 import '../models/tag.dart';
@@ -91,6 +93,72 @@ class UserService extends GetxService {
     return ApiProvider.getConversations(user!.id, pageNum);
   }
 
+  Future<ApiResult<GroupResult<NotificationItemModel>>> getNotifications(
+    int pageNum,
+  ) {
+    if (!accountService.isLogin) {
+      SmartDialog.showToast(t.account.require_login);
+      return Future.value(
+        ApiResult(data: null, message: t.account.require_login, success: false),
+      );
+    }
+    return ApiProvider.getNotifications(user!.id, pageNum);
+  }
+
+  Future<bool> readNotification(String notificationId) async {
+    bool flag = false;
+    if (!accountService.isLogin) {
+      SmartDialog.showToast(t.account.require_login);
+      return flag;
+    }
+    await ApiProvider.readNotification(notificationId).then((value) {
+      if (!value.success) {
+        SmartDialog.showToast(value.message!);
+        flag = false;
+      } else {
+        flag = true;
+      }
+    });
+    return flag;
+  }
+
+  Future<bool> readAllNotifications() async {
+    bool flag = false;
+    if (!accountService.isLogin) {
+      SmartDialog.showToast(t.account.require_login);
+      return flag;
+    }
+    await ApiProvider.readAllNotifications().then((value) {
+      if (!value.success) {
+        SmartDialog.showToast(value.message!);
+        flag = false;
+      } else {
+        flag = true;
+      }
+    });
+    return flag;
+  }
+
+  Future<ApiResult<ConversationModel>> createConversation({
+    required String userId,
+    required String title,
+    required String body,
+  }) async {
+    if (!accountService.isLogin) {
+      SmartDialog.showToast(t.account.require_login);
+      return ApiResult(
+        data: null,
+        message: t.account.require_login,
+        success: false,
+      );
+    }
+    return ApiProvider.createConversation(
+      userId: userId,
+      title: title,
+      body: body,
+    );
+  }
+
   Future<bool> followUser(String userId) async {
     bool flag = false;
     if (!accountService.isLogin) {
@@ -117,6 +185,53 @@ class UserService extends GetxService {
       return flag;
     }
     await ApiProvider.unfollowUser(userId: userId).then((value) {
+      if (!value.success) {
+        SmartDialog.showToast(value.message!);
+        flag = false;
+      } else {
+        flag = true;
+      }
+    });
+    return flag;
+  }
+
+  Future<bool> getUserBlockStatus(String userId) async {
+    bool blocked = false;
+    if (!accountService.isLogin) {
+      return blocked;
+    }
+    await ApiProvider.getUserBlockStatus(userId: userId).then((value) {
+      if (value.success) {
+        blocked = value.data!;
+      }
+    });
+    return blocked;
+  }
+
+  Future<bool> blockUser(String userId) async {
+    bool flag = false;
+    if (!accountService.isLogin) {
+      SmartDialog.showToast(t.account.require_login);
+      return flag;
+    }
+    await ApiProvider.blockUser(userId: userId).then((value) {
+      if (!value.success) {
+        SmartDialog.showToast(value.message!);
+        flag = false;
+      } else {
+        flag = true;
+      }
+    });
+    return flag;
+  }
+
+  Future<bool> unblockUser(String userId) async {
+    bool flag = false;
+    if (!accountService.isLogin) {
+      SmartDialog.showToast(t.account.require_login);
+      return flag;
+    }
+    await ApiProvider.unblockUser(userId: userId).then((value) {
       if (!value.success) {
         SmartDialog.showToast(value.message!);
         flag = false;
@@ -432,29 +547,23 @@ class UserService extends GetxService {
     return flag;
   }
 
-  Future<bool> sendMessage({
+  Future<ApiResult<MessageModel>> sendMessage({
     required String conversationId,
     required String content,
   }) async {
-    bool flag = false;
     if (!accountService.isLogin) {
       SmartDialog.showToast(t.account.require_login);
-      flag = false;
-      return flag;
+      return ApiResult(
+        data: null,
+        message: t.account.require_login,
+        success: false,
+      );
     }
 
-    await ApiProvider.sendMessage(
+    return ApiProvider.sendMessage(
       conversationId: conversationId,
       content: content,
-    ).then((value) {
-      if (!value.success) {
-        SmartDialog.showToast(value.message!);
-        flag = false;
-      } else {
-        flag = true;
-      }
-    });
-    return flag;
+    );
   }
 
   Future<bool> createThread({

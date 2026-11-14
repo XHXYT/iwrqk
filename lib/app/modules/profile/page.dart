@@ -1,19 +1,27 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iwrqk/i18n/strings.g.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../components/buttons/follow_button/widget.dart';
 import '../../components/buttons/friend_button/widget.dart';
 import '../../components/load_fail.dart';
 import '../../components/media_preview/media_preview.dart';
 import '../../components/network_image.dart';
+import '../../const/iwara.dart';
 import '../../data/enums/types.dart';
+import '../../data/services/account_service.dart';
+import '../../data/services/user_service.dart';
+import '../../routes/pages.dart';
 import '../../utils/display_util.dart';
 import 'controller.dart';
 import 'guestbook/page.dart';
 import 'profile_detail/page.dart';
+import 'widgets/message_compose_sheet.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -24,6 +32,106 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final ProfileController _controller = Get.find();
+
+  bool get _isSelfProfile {
+    final accountService = Get.find<AccountService>();
+    final userService = Get.find<UserService>();
+    return accountService.isLogin &&
+        userService.user != null &&
+        userService.user!.id == _controller.profile.user!.id;
+  }
+
+  void _showMessageComposeSheet() {
+    final accountService = Get.find<AccountService>();
+    if (!accountService.isLogin) {
+      Get.toNamed(AppRoutes.login);
+      return;
+    }
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: MessageComposeSheet(targetUser: _controller.profile.user!),
+      ),
+    );
+  }
+
+  Widget _buildMoreMenuButton() {
+    final accountService = Get.find<AccountService>();
+    final bool showBlockItem = accountService.isLogin && !_isSelfProfile;
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert),
+      onSelected: (value) => _onMoreMenuSelected(value),
+      itemBuilder: (context) => [
+        if (showBlockItem)
+          PopupMenuItem(
+            value: "block",
+            child: Obx(
+              () => Text(
+                _controller.isUserBlocked.value
+                    ? t.profile.unblock_user
+                    : t.profile.block_user,
+              ),
+            ),
+          ),
+        const PopupMenuDivider(),
+        PopupMenuItem(
+          value: "copyLink",
+          child: Text(t.profile.copy_profile_link),
+        ),
+        PopupMenuItem(
+          value: "share",
+          child: Text(t.profile.share_profile),
+        ),
+        PopupMenuItem(
+          value: "openInBrowser",
+          child: Text(t.profile.open_in_browser),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _onMoreMenuSelected(String value) async {
+    final user = _controller.profile.user!;
+    final String profileUrl = IwaraConst.profilePageUrl.replaceFirst(
+      "{username}",
+      user.username,
+    );
+
+    if (value == "block") {
+      if (_controller.isUserBlocked.value) {
+        await _controller.toggleBlockUser();
+        return;
+      }
+      final bool? confirmed = await Get.dialog<bool>(
+        AlertDialog(
+          title: Text(t.profile.block_user),
+          content: Text(t.message.block_user_confirm),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(result: false),
+              child: Text(t.notifications.cancel),
+            ),
+            TextButton(
+              onPressed: () => Get.back(result: true),
+              child: Text(t.notifications.confirm),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true) {
+        await _controller.toggleBlockUser();
+      }
+    } else if (value == "copyLink") {
+      await Clipboard.setData(ClipboardData(text: profileUrl));
+      SmartDialog.showToast(t.message.copied_to_clipboard);
+    } else if (value == "share") {
+      Share.share(profileUrl);
+    } else if (value == "openInBrowser") {
+      await launchUrlString(profileUrl, mode: LaunchMode.externalApplication);
+    }
+  }
 
   Widget _buildJoinSeenAtDate() {
     Widget createdAtWidget = Text(
@@ -391,8 +499,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               titleSpacing: 0,
               actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.message)),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+                if (!_isSelfProfile)
+                  IconButton(
+                    onPressed: () {
+                      _showMessageComposeSheet();
+                    },
+                    icon: const Icon(Icons.message),
+                  ),
+                _buildMoreMenuButton(),
               ],
             ),
           ];
