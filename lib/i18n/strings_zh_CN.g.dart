@@ -48,6 +48,7 @@ class TranslationsZhCn extends Translations with BaseTranslations<AppLocale, Tra
 	@override late final Translations$profile$zh_CN profile = Translations$profile$zh_CN.internal(_root);
 	@override late final Translations$sort$zh_CN sort = Translations$sort$zh_CN.internal(_root);
 	@override late final Translations$filter$zh_CN filter = Translations$filter$zh_CN.internal(_root);
+	@override late final Translations$searchFilter$zh_CN searchFilter = Translations$searchFilter$zh_CN.internal(_root);
 	@override late final Translations$search$zh_CN search = Translations$search$zh_CN.internal(_root);
 	@override late final Translations$time$zh_CN time = Translations$time$zh_CN.internal(_root);
 	@override late final Translations$media$zh_CN media = Translations$media$zh_CN.internal(_root);
@@ -223,6 +224,26 @@ class Translations$filter$zh_CN extends Translations$filter$en {
 	@override String get select_rating => '选择分级';
 	@override String get select_year => '选择年份';
 	@override String get select_month => '选择月份';
+}
+
+// Path: searchFilter
+class Translations$searchFilter$zh_CN extends Translations$searchFilter$en {
+	Translations$searchFilter$zh_CN.internal(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '高级搜索';
+	@override String get addFilter => '添加筛选条件';
+	@override String get reset => '重置';
+	@override String get apply => '应用';
+	@override String get empty => '暂无筛选条件';
+	@override String get pleaseEnterValue => '请输入值';
+	@override String get selectDate => '选择日期';
+	@override String get startDate => '开始';
+	@override String get endDate => '结束';
+	@override late final Translations$searchFilter$fields$zh_CN fields = Translations$searchFilter$fields$zh_CN.internal(_root);
+	@override late final Translations$searchFilter$operators$zh_CN operators = Translations$searchFilter$operators$zh_CN.internal(_root);
 }
 
 // Path: search
@@ -620,6 +641,49 @@ class Translations$error$zh_CN extends Translations$error$en {
 	@override late final Translations$error$account$zh_CN account = Translations$error$account$zh_CN.internal(_root);
 }
 
+// Path: searchFilter.fields
+class Translations$searchFilter$fields$zh_CN extends Translations$searchFilter$fields$en {
+	Translations$searchFilter$fields$zh_CN.internal(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '标题';
+	@override String get body => '简介';
+	@override String get tags => '标签';
+	@override String get author => '作者';
+	@override String get date => '发布日期';
+	@override String get registrationDate => '注册日期';
+	@override String get private => '私密';
+	@override String get duration => '时长（秒）';
+	@override String get likes => '点赞数';
+	@override String get views => '播放量';
+	@override String get comments => '评论数';
+	@override String get rating => '分级';
+	@override String get imageCount => '图片数';
+	@override String get username => '用户名';
+	@override String get nickname => '昵称';
+}
+
+// Path: searchFilter.operators
+class Translations$searchFilter$operators$zh_CN extends Translations$searchFilter$operators$en {
+	Translations$searchFilter$operators$zh_CN.internal(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get contains => '包含';
+	@override String get equals => '等于';
+	@override String get notEquals => '不等于';
+	@override String get greaterThan => '大于';
+	@override String get greaterEqual => '大于等于';
+	@override String get lessThan => '小于';
+	@override String get lessEqual => '小于等于';
+	@override String get range => '范围';
+	@override String get inOp => '包含任一';
+	@override String get notIn => '不含任一';
+}
+
 // Path: search.history
 class Translations$search$history$zh_CN extends Translations$search$history$en {
 	Translations$search$history$zh_CN.internal(TranslationsZhCn root) : this._root = root, super.internal(root);
@@ -833,6 +897,40 @@ extension on TranslationsZhCn {
 			'filter.select_rating' => '选择分级',
 			'filter.select_year' => '选择年份',
 			'filter.select_month' => '选择月份',
+			'searchFilter.title' => '高级搜索',
+			'searchFilter.addFilter' => '添加筛选条件',
+			'searchFilter.reset' => '重置',
+			'searchFilter.apply' => '应用',
+			'searchFilter.empty' => '暂无筛选条件',
+			'searchFilter.pleaseEnterValue' => '请输入值',
+			'searchFilter.selectDate' => '选择日期',
+			'searchFilter.startDate' => '开始',
+			'searchFilter.endDate' => '结束',
+			'searchFilter.fields.title' => '标题',
+			'searchFilter.fields.body' => '简介',
+			'searchFilter.fields.tags' => '标签',
+			'searchFilter.fields.author' => '作者',
+			'searchFilter.fields.date' => '发布日期',
+			'searchFilter.fields.registrationDate' => '注册日期',
+			'searchFilter.fields.private' => '私密',
+			'searchFilter.fields.duration' => '时长（秒）',
+			'searchFilter.fields.likes' => '点赞数',
+			'searchFilter.fields.views' => '播放量',
+			'searchFilter.fields.comments' => '评论数',
+			'searchFilter.fields.rating' => '分级',
+			'searchFilter.fields.imageCount' => '图片数',
+			'searchFilter.fields.username' => '用户名',
+			'searchFilter.fields.nickname' => '昵称',
+			'searchFilter.operators.contains' => '包含',
+			'searchFilter.operators.equals' => '等于',
+			'searchFilter.operators.notEquals' => '不等于',
+			'searchFilter.operators.greaterThan' => '大于',
+			'searchFilter.operators.greaterEqual' => '大于等于',
+			'searchFilter.operators.lessThan' => '小于',
+			'searchFilter.operators.lessEqual' => '小于等于',
+			'searchFilter.operators.range' => '范围',
+			'searchFilter.operators.inOp' => '包含任一',
+			'searchFilter.operators.notIn' => '不含任一',
 			'search.users' => '用户',
 			'search.threads' => '帖子',
 			'search.search' => '搜索',

@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
-import 'package:iwrqk/app/modules/settings/controller.dart';
 
 import '../../../data/enums/result.dart';
 import '../../../data/enums/types.dart';
@@ -31,6 +28,13 @@ class MediaPreviewGridController extends IwrRefreshController<MediaModel> {
     _sourceType = sourceType;
     _searchSetting = searchSetting;
     _applyFilter = applyFilter;
+  }
+
+  Future<void> resetSearchKeyword(String keyword) async {
+    final searchSetting = _searchSetting;
+    if (searchSetting == null) return;
+    searchSetting.keyword = keyword;
+    refreshData(showSplash: true);
   }
 
   @override

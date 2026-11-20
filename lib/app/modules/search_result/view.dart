@@ -8,7 +8,9 @@ import '../../components/user_preview/users_preview_list/widget.dart';
 import '../../data/enums/types.dart';
 import '../../data/models/account/settings/media_search_setting.dart';
 import '../../data/models/account/settings/users_sort_setting.dart';
+import '../../data/models/search/search_filter_config.dart';
 import 'controller.dart';
+import 'widgets/advanced_filter/page.dart';
 
 class SearchResultPage extends GetView<SearchResultController> {
   const SearchResultPage({super.key});
@@ -55,7 +57,9 @@ class SearchResultPage extends GetView<SearchResultController> {
                 (index) => MediaPreviewGrid(
                   sourceType: MediaSourceType.search,
                   searchSetting: MediaSearchSettingModel(
-                    keyword: controller.keyword,
+                    keyword: controller.composedKeyword(
+                      SearchSegment.videos,
+                    ),
                     searchType: SearchType.videos,
                     orderType: orderTypeList[index],
                   ),
@@ -85,7 +89,9 @@ class SearchResultPage extends GetView<SearchResultController> {
                 (index) => MediaPreviewGrid(
                   sourceType: MediaSourceType.search,
                   searchSetting: MediaSearchSettingModel(
-                    keyword: controller.keyword,
+                    keyword: controller.composedKeyword(
+                      SearchSegment.images,
+                    ),
                     searchType: SearchType.images,
                     orderType: orderTypeList[index],
                   ),
@@ -114,7 +120,9 @@ class SearchResultPage extends GetView<SearchResultController> {
               children: List.generate(
                     2,
                     (index) => SearchPost(
-                      keyword: controller.keyword,
+                      keyword: controller.composedKeyword(
+                        SearchSegment.threads,
+                      ),
                       orderType: orderTypeList[index],
                     )
               ),
@@ -148,6 +156,23 @@ class SearchResultPage extends GetView<SearchResultController> {
             ),
           ),
         ),
+        actions: [
+          Obx(() {
+            final segment = SearchSegment
+                .values[controller.currentSegmentIndex.value];
+            final count = controller.activeFilterCount(segment);
+            return IconButton(
+              tooltip: t.searchFilter.title,
+              onPressed: () =>
+                  Get.to(() => AdvancedFilterPage(segment: segment)),
+              icon: Badge(
+                isLabelVisible: count > 0,
+                label: Text("$count"),
+                child: const Icon(Icons.filter_list),
+              ),
+              );
+          }),
+        ],
       ),
       body: Column(
         children: [
@@ -196,7 +221,9 @@ class SearchResultPage extends GetView<SearchResultController> {
                 _buildImagesTab(context),
                 UsersPreviewList(
                   sourceType: UsersSourceType.search,
-                  sortSetting: UsersSortSetting(keyword: controller.keyword),
+                  sortSetting: UsersSortSetting(
+                    keyword: controller.composedKeyword(SearchSegment.users),
+                  ),
                   tag: controller.childUsersControllerTag,
                 ),
                 _buildPostsTab(context)

@@ -96,6 +96,46 @@
     "select_year": "Select year",
     "select_month": "Select month"
   },
+  "searchFilter": {
+    "title": "Advanced search",
+    "addFilter": "Add filter",
+    "reset": "Reset",
+    "apply": "Apply",
+    "empty": "No filters yet",
+    "pleaseEnterValue": "Enter a value",
+    "selectDate": "Select date",
+    "startDate": "Start",
+    "endDate": "End",
+    "fields": {
+      "title": "Title",
+      "body": "Description",
+      "tags": "Tags",
+      "author": "Author",
+      "date": "Publish date",
+      "registrationDate": "Registration date",
+      "private": "Private",
+      "duration": "Duration (seconds)",
+      "likes": "Likes",
+      "views": "Views",
+      "comments": "Comments",
+      "rating": "Rating",
+      "imageCount": "Image count",
+      "username": "Username",
+      "nickname": "Nickname"
+    },
+    "operators": {
+      "contains": "Contains",
+      "equals": "Equals",
+      "notEquals": "Not equals",
+      "greaterThan": "Greater than",
+      "greaterEqual": "Greater or equal",
+      "lessThan": "Less than",
+      "lessEqual": "Less or equal",
+      "range": "Range",
+      "inOp": "Contains any",
+      "notIn": "Excludes any"
+    }
+  },
   "search": {
     "users": "Users",
     "threads": "Thread",

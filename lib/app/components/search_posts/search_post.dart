@@ -10,12 +10,12 @@ import '../../utils/display_util.dart';
 import '../network_image.dart';
 
 class SearchPost extends StatefulWidget {
-  final String tag = "search_post_controller";
-
   final String keyword;
   final OrderType orderType;
 
   const SearchPost({super.key, required this.keyword, required this.orderType});
+
+  String get tag => "search_post_${orderType.value}";
 
   @override
   State<SearchPost> createState() => _SearchPostState();

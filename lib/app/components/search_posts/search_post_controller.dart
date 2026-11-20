@@ -8,15 +8,17 @@ import '../../data/enums/types.dart';
 
 class SearchPostsController extends IwrRefreshController<ThreadModel>{
 
-  final String keyword;
+  String keyword;
   final MediaType mediaType;
   final OrderType orderType;
   ScrollController scrollController=ScrollController();
 
   SearchPostsController(this.keyword, {required this.mediaType, required this.orderType});
 
-
-
+  void resetKeyword(String keyword) {
+    this.keyword = keyword;
+    refreshData(showSplash: true);
+  }
 
   @override
   Future<GroupResult<ThreadModel>> getNewData(int currentPage) async{

@@ -1,82 +1,67 @@
 {
-   "workbench.colorTheme": "Default Light+",
-   "workbench.colorCustomizations": {
-     // 左侧活动栏（图标栏）
-     "activityBar.background": "#f8f9fa",
-     "activityBar.foreground": "#495057",
-     "activityBar.inactiveForeground": "#adb5bd",
-     "activityBarBadge.background": "#007acc",
-     "activityBarBadge.foreground": "#ffffff",
-     
-     // 文件侧边栏
-     "sideBar.background": "#ffffff",
-     "sideBar.foreground": "#212529",
-     "sideBar.border": "#e9ecef",
-     "sideBarSectionHeader.background": "#f1f3f5",
-     "sideBarSectionHeader.foreground": "#495057",
-     
-     // 顶部标签栏
-     "tab.activeBackground": "#ffffff",
-     "tab.activeForeground": "#212529",
-     "tab.inactiveBackground": "#f8f9fa",
-     "tab.inactiveForeground": "#868e96",
-     "tab.border": "#e9ecef",
-     
-     // 代码编辑区
-     "editor.background": "#ffffff",
-     "editor.foreground": "#212529",
-     "editor.lineHighlightBackground": "#f8f9fa",
-     "editor.selectionBackground": "#d7e3fc",
-     "editorCursor.foreground": "#212529",
-     "editorIndentGuide.background": "#e9ecef",
-     "editorIndentGuide.activeBackground": "#adb5bd",
-     
-     // 底部状态栏
-     "statusBar.background": "#007acc",
-     "statusBar.foreground": "#ffffff",
-     "statusBar.noFolderBackground": "#6c757d",
-     "statusBar.debuggingBackground": "#fd7e14",
-     
-     // 底部面板（终端/输出面板）
-     "panel.background": "#f8f9fa",
-     "panel.border": "#e9ecef",
-     "panelTitle.activeBorder": "#007acc",
-     "panelTitle.activeForeground": "#212529",
-     "panelTitle.inactiveForeground": "#868e96",
-     
-     // 顶部标题栏
-     "titleBar.activeBackground": "#f8f9fa",
-     "titleBar.activeForeground": "#212529",
-     "titleBar.inactiveBackground": "#f1f3f5",
-     "titleBar.inactiveForeground": "#868e96",
-     
-     // 终端ANSI配色（适配浅色背景）
-     "terminal.background": "#ffffff",
-     "terminal.foreground": "#212529",
-     "terminal.ansiBlack": "#212529",
-     "terminal.ansiRed": "#d6336c",
-     "terminal.ansiGreen": "#2f9e44",
-     "terminal.ansiYellow": "#f59f00",
-     "terminal.ansiBlue": "#1971c2",
-     "terminal.ansiMagenta": "#ae3ec9",
-     "terminal.ansiCyan": "#0c8599",
-     "terminal.ansiWhite": "#e9ecef",
-     "terminal.ansiBrightBlack": "#868e96",
-     "terminal.ansiBrightRed": "#f03e3e",
-     "terminal.ansiBrightGreen": "#40c057",
-     "terminal.ansiBrightYellow": "#fab005",
-     "terminal.ansiBrightBlue": "#339af0",
-     "terminal.ansiBrightMagenta": "#be4bdb",
-     "terminal.ansiBrightCyan": "#15aabf",
-     "terminal.ansiBrightWhite": "#f8f9fa"
-   },
-   "editor.tokenColorCustomizations": {
-     "comments": "#6c757d",
-     "keywords": "#d6336c",
-     "strings": "#2f9e44",
-     "functions": "#1971c2",
-     "numbers": "#f59f00",
-     "types": "#ae3ec9"
-   }
- }
- 
+  "workbench.colorTheme": "Default Light+",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#f8f9fa",
+    "activityBar.foreground": "#495057",
+    "activityBar.inactiveForeground": "#adb5bd",
+    "activityBarBadge.background": "#007acc",
+    "activityBarBadge.foreground": "#ffffff",
+    "sideBar.background": "#ffffff",
+    "sideBar.foreground": "#212529",
+    "sideBar.border": "#e9ecef",
+    "sideBarSectionHeader.background": "#f1f3f5",
+    "sideBarSectionHeader.foreground": "#495057",
+    "tab.activeBackground": "#ffffff",
+    "tab.activeForeground": "#212529",
+    "tab.inactiveBackground": "#f8f9fa",
+    "tab.inactiveForeground": "#868e96",
+    "tab.border": "#e9ecef",
+    "editor.background": "#ffffff",
+    "editor.foreground": "#212529",
+    "editor.lineHighlightBackground": "#f8f9fa",
+    "editor.selectionBackground": "#d7e3fc",
+    "editorCursor.foreground": "#212529",
+    "editorIndentGuide.background": "#e9ecef",
+    "editorIndentGuide.activeBackground": "#adb5bd",
+    "statusBar.background": "#007acc",
+    "statusBar.foreground": "#ffffff",
+    "statusBar.noFolderBackground": "#6c757d",
+    "statusBar.debuggingBackground": "#fd7e14",
+    "panel.background": "#f8f9fa",
+    "panel.border": "#e9ecef",
+    "panelTitle.activeBorder": "#007acc",
+    "panelTitle.activeForeground": "#212529",
+    "panelTitle.inactiveForeground": "#868e96",
+    "titleBar.activeBackground": "#f8f9fa",
+    "titleBar.activeForeground": "#212529",
+    "titleBar.inactiveBackground": "#f1f3f5",
+    "titleBar.inactiveForeground": "#868e96",
+    "terminal.background": "#ffffff",
+    "terminal.foreground": "#212529",
+    "terminal.ansiBlack": "#212529",
+    "terminal.ansiRed": "#d6336c",
+    "terminal.ansiGreen": "#2f9e44",
+    "terminal.ansiYellow": "#f59f00",
+    "terminal.ansiBlue": "#1971c2",
+    "terminal.ansiMagenta": "#ae3ec9",
+    "terminal.ansiCyan": "#0c8599",
+    "terminal.ansiWhite": "#e9ecef",
+    "terminal.ansiBrightBlack": "#868e96",
+    "terminal.ansiBrightRed": "#f03e3e",
+    "terminal.ansiBrightGreen": "#40c057",
+    "terminal.ansiBrightYellow": "#fab005",
+    "terminal.ansiBrightBlue": "#339af0",
+    "terminal.ansiBrightMagenta": "#be4bdb",
+    "terminal.ansiBrightCyan": "#15aabf",
+    "terminal.ansiBrightWhite": "#f8f9fa"
+  },
+  "editor.tokenColorCustomizations": {
+    "comments": "#6c757d",
+    "keywords": "#d6336c",
+    "strings": "#2f9e44",
+    "functions": "#1971c2",
+    "numbers": "#f59f00",
+    "types": "#ae3ec9"
+  },
+  "dart.flutterSdkPath": ".fvm/versions/ya520/3.47.7+ohos-aotfix"
+}

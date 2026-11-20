@@ -90,6 +90,46 @@
     "select_year": "选择年份",
     "select_month": "选择月份"
   },
+  "searchFilter": {
+    "title": "高级搜索",
+    "addFilter": "添加筛选条件",
+    "reset": "重置",
+    "apply": "应用",
+    "empty": "暂无筛选条件",
+    "pleaseEnterValue": "请输入值",
+    "selectDate": "选择日期",
+    "startDate": "开始",
+    "endDate": "结束",
+    "fields": {
+      "title": "标题",
+      "body": "简介",
+      "tags": "标签",
+      "author": "作者",
+      "date": "发布日期",
+      "registrationDate": "注册日期",
+      "private": "私密",
+      "duration": "时长（秒）",
+      "likes": "点赞数",
+      "views": "播放量",
+      "comments": "评论数",
+      "rating": "分级",
+      "imageCount": "图片数",
+      "username": "用户名",
+      "nickname": "昵称"
+    },
+    "operators": {
+      "contains": "包含",
+      "equals": "等于",
+      "notEquals": "不等于",
+      "greaterThan": "大于",
+      "greaterEqual": "大于等于",
+      "lessThan": "小于",
+      "lessEqual": "小于等于",
+      "range": "范围",
+      "inOp": "包含任一",
+      "notIn": "不含任一"
+    }
+  },
   "search": {
     "users": "用户",
     "threads": "帖子",

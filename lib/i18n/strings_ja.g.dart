@@ -48,6 +48,7 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$profile$ja profile = _Translations$profile$ja._(_root);
 	@override late final _Translations$sort$ja sort = _Translations$sort$ja._(_root);
 	@override late final _Translations$filter$ja filter = _Translations$filter$ja._(_root);
+	@override late final _Translations$searchFilter$ja searchFilter = _Translations$searchFilter$ja._(_root);
 	@override late final _Translations$search$ja search = _Translations$search$ja._(_root);
 	@override late final _Translations$time$ja time = _Translations$time$ja._(_root);
 	@override late final _Translations$media$ja media = _Translations$media$ja._(_root);
@@ -223,6 +224,26 @@ class _Translations$filter$ja extends Translations$filter$en {
 	@override String get select_rating => 'レーティングを選択';
 	@override String get select_year => '年を選択';
 	@override String get select_month => '月を選択';
+}
+
+// Path: searchFilter
+class _Translations$searchFilter$ja extends Translations$searchFilter$en {
+	_Translations$searchFilter$ja._(TranslationsJa root) : this._root = root, super.internal(root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '詳細検索';
+	@override String get addFilter => '条件を追加';
+	@override String get reset => 'リセット';
+	@override String get apply => '適用';
+	@override String get empty => '条件がありません';
+	@override String get pleaseEnterValue => '値を入力';
+	@override String get selectDate => '日付を選択';
+	@override String get startDate => '開始';
+	@override String get endDate => '終了';
+	@override late final _Translations$searchFilter$fields$ja fields = _Translations$searchFilter$fields$ja._(_root);
+	@override late final _Translations$searchFilter$operators$ja operators = _Translations$searchFilter$operators$ja._(_root);
 }
 
 // Path: search
@@ -620,6 +641,49 @@ class _Translations$error$ja extends Translations$error$en {
 	@override late final _Translations$error$account$ja account = _Translations$error$account$ja._(_root);
 }
 
+// Path: searchFilter.fields
+class _Translations$searchFilter$fields$ja extends Translations$searchFilter$fields$en {
+	_Translations$searchFilter$fields$ja._(TranslationsJa root) : this._root = root, super.internal(root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'タイトル';
+	@override String get body => '説明';
+	@override String get tags => 'タグ';
+	@override String get author => '投稿者';
+	@override String get date => '投稿日';
+	@override String get registrationDate => '登録日';
+	@override String get private => '非公開';
+	@override String get duration => '長さ（秒）';
+	@override String get likes => 'いいね数';
+	@override String get views => '再生数';
+	@override String get comments => 'コメント数';
+	@override String get rating => 'レーティング';
+	@override String get imageCount => '画像枚数';
+	@override String get username => 'ユーザー名';
+	@override String get nickname => 'ニックネーム';
+}
+
+// Path: searchFilter.operators
+class _Translations$searchFilter$operators$ja extends Translations$searchFilter$operators$en {
+	_Translations$searchFilter$operators$ja._(TranslationsJa root) : this._root = root, super.internal(root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get contains => '含む';
+	@override String get equals => '等しい';
+	@override String get notEquals => '等しくない';
+	@override String get greaterThan => 'より大きい';
+	@override String get greaterEqual => '以上';
+	@override String get lessThan => 'より小さい';
+	@override String get lessEqual => '以下';
+	@override String get range => '範囲';
+	@override String get inOp => 'いずれかを含む';
+	@override String get notIn => 'いずれも含まない';
+}
+
 // Path: search.history
 class _Translations$search$history$ja extends Translations$search$history$en {
 	_Translations$search$history$ja._(TranslationsJa root) : this._root = root, super.internal(root);
@@ -833,6 +897,40 @@ extension on TranslationsJa {
 			'filter.select_rating' => 'レーティングを選択',
 			'filter.select_year' => '年を選択',
 			'filter.select_month' => '月を選択',
+			'searchFilter.title' => '詳細検索',
+			'searchFilter.addFilter' => '条件を追加',
+			'searchFilter.reset' => 'リセット',
+			'searchFilter.apply' => '適用',
+			'searchFilter.empty' => '条件がありません',
+			'searchFilter.pleaseEnterValue' => '値を入力',
+			'searchFilter.selectDate' => '日付を選択',
+			'searchFilter.startDate' => '開始',
+			'searchFilter.endDate' => '終了',
+			'searchFilter.fields.title' => 'タイトル',
+			'searchFilter.fields.body' => '説明',
+			'searchFilter.fields.tags' => 'タグ',
+			'searchFilter.fields.author' => '投稿者',
+			'searchFilter.fields.date' => '投稿日',
+			'searchFilter.fields.registrationDate' => '登録日',
+			'searchFilter.fields.private' => '非公開',
+			'searchFilter.fields.duration' => '長さ（秒）',
+			'searchFilter.fields.likes' => 'いいね数',
+			'searchFilter.fields.views' => '再生数',
+			'searchFilter.fields.comments' => 'コメント数',
+			'searchFilter.fields.rating' => 'レーティング',
+			'searchFilter.fields.imageCount' => '画像枚数',
+			'searchFilter.fields.username' => 'ユーザー名',
+			'searchFilter.fields.nickname' => 'ニックネーム',
+			'searchFilter.operators.contains' => '含む',
+			'searchFilter.operators.equals' => '等しい',
+			'searchFilter.operators.notEquals' => '等しくない',
+			'searchFilter.operators.greaterThan' => 'より大きい',
+			'searchFilter.operators.greaterEqual' => '以上',
+			'searchFilter.operators.lessThan' => 'より小さい',
+			'searchFilter.operators.lessEqual' => '以下',
+			'searchFilter.operators.range' => '範囲',
+			'searchFilter.operators.inOp' => 'いずれかを含む',
+			'searchFilter.operators.notIn' => 'いずれも含まない',
 			'search.users' => 'ユーザー',
 			'search.threads' => '投稿',
 			'search.search' => '検索',

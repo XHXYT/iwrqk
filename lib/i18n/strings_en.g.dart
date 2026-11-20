@@ -56,6 +56,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$profile$en profile = Translations$profile$en.internal(_root);
 	late final Translations$sort$en sort = Translations$sort$en.internal(_root);
 	late final Translations$filter$en filter = Translations$filter$en.internal(_root);
+	late final Translations$searchFilter$en searchFilter = Translations$searchFilter$en.internal(_root);
 	late final Translations$search$en search = Translations$search$en.internal(_root);
 	late final Translations$time$en time = Translations$time$en.internal(_root);
 	late final Translations$media$en media = Translations$media$en.internal(_root);
@@ -377,6 +378,45 @@ class Translations$filter$en {
 
 	/// en: 'Select month'
 	String get select_month => 'Select month';
+}
+
+// Path: searchFilter
+class Translations$searchFilter$en {
+	Translations$searchFilter$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Advanced search'
+	String get title => 'Advanced search';
+
+	/// en: 'Add filter'
+	String get addFilter => 'Add filter';
+
+	/// en: 'Reset'
+	String get reset => 'Reset';
+
+	/// en: 'Apply'
+	String get apply => 'Apply';
+
+	/// en: 'No filters yet'
+	String get empty => 'No filters yet';
+
+	/// en: 'Enter a value'
+	String get pleaseEnterValue => 'Enter a value';
+
+	/// en: 'Select date'
+	String get selectDate => 'Select date';
+
+	/// en: 'Start'
+	String get startDate => 'Start';
+
+	/// en: 'End'
+	String get endDate => 'End';
+
+	late final Translations$searchFilter$fields$en fields = Translations$searchFilter$fields$en.internal(_root);
+	late final Translations$searchFilter$operators$en operators = Translations$searchFilter$operators$en.internal(_root);
 }
 
 // Path: search
@@ -1170,6 +1210,99 @@ class Translations$error$en {
 	late final Translations$error$account$en account = Translations$error$account$en.internal(_root);
 }
 
+// Path: searchFilter.fields
+class Translations$searchFilter$fields$en {
+	Translations$searchFilter$fields$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Title'
+	String get title => 'Title';
+
+	/// en: 'Description'
+	String get body => 'Description';
+
+	/// en: 'Tags'
+	String get tags => 'Tags';
+
+	/// en: 'Author'
+	String get author => 'Author';
+
+	/// en: 'Publish date'
+	String get date => 'Publish date';
+
+	/// en: 'Registration date'
+	String get registrationDate => 'Registration date';
+
+	/// en: 'Private'
+	String get private => 'Private';
+
+	/// en: 'Duration (seconds)'
+	String get duration => 'Duration (seconds)';
+
+	/// en: 'Likes'
+	String get likes => 'Likes';
+
+	/// en: 'Views'
+	String get views => 'Views';
+
+	/// en: 'Comments'
+	String get comments => 'Comments';
+
+	/// en: 'Rating'
+	String get rating => 'Rating';
+
+	/// en: 'Image count'
+	String get imageCount => 'Image count';
+
+	/// en: 'Username'
+	String get username => 'Username';
+
+	/// en: 'Nickname'
+	String get nickname => 'Nickname';
+}
+
+// Path: searchFilter.operators
+class Translations$searchFilter$operators$en {
+	Translations$searchFilter$operators$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Contains'
+	String get contains => 'Contains';
+
+	/// en: 'Equals'
+	String get equals => 'Equals';
+
+	/// en: 'Not equals'
+	String get notEquals => 'Not equals';
+
+	/// en: 'Greater than'
+	String get greaterThan => 'Greater than';
+
+	/// en: 'Greater or equal'
+	String get greaterEqual => 'Greater or equal';
+
+	/// en: 'Less than'
+	String get lessThan => 'Less than';
+
+	/// en: 'Less or equal'
+	String get lessEqual => 'Less or equal';
+
+	/// en: 'Range'
+	String get range => 'Range';
+
+	/// en: 'Contains any'
+	String get inOp => 'Contains any';
+
+	/// en: 'Excludes any'
+	String get notIn => 'Excludes any';
+}
+
 // Path: search.history
 class Translations$search$history$en {
 	Translations$search$history$en.internal(this._root);
@@ -1471,6 +1604,40 @@ extension on Translations {
 			'filter.select_rating' => 'Select rating',
 			'filter.select_year' => 'Select year',
 			'filter.select_month' => 'Select month',
+			'searchFilter.title' => 'Advanced search',
+			'searchFilter.addFilter' => 'Add filter',
+			'searchFilter.reset' => 'Reset',
+			'searchFilter.apply' => 'Apply',
+			'searchFilter.empty' => 'No filters yet',
+			'searchFilter.pleaseEnterValue' => 'Enter a value',
+			'searchFilter.selectDate' => 'Select date',
+			'searchFilter.startDate' => 'Start',
+			'searchFilter.endDate' => 'End',
+			'searchFilter.fields.title' => 'Title',
+			'searchFilter.fields.body' => 'Description',
+			'searchFilter.fields.tags' => 'Tags',
+			'searchFilter.fields.author' => 'Author',
+			'searchFilter.fields.date' => 'Publish date',
+			'searchFilter.fields.registrationDate' => 'Registration date',
+			'searchFilter.fields.private' => 'Private',
+			'searchFilter.fields.duration' => 'Duration (seconds)',
+			'searchFilter.fields.likes' => 'Likes',
+			'searchFilter.fields.views' => 'Views',
+			'searchFilter.fields.comments' => 'Comments',
+			'searchFilter.fields.rating' => 'Rating',
+			'searchFilter.fields.imageCount' => 'Image count',
+			'searchFilter.fields.username' => 'Username',
+			'searchFilter.fields.nickname' => 'Nickname',
+			'searchFilter.operators.contains' => 'Contains',
+			'searchFilter.operators.equals' => 'Equals',
+			'searchFilter.operators.notEquals' => 'Not equals',
+			'searchFilter.operators.greaterThan' => 'Greater than',
+			'searchFilter.operators.greaterEqual' => 'Greater or equal',
+			'searchFilter.operators.lessThan' => 'Less than',
+			'searchFilter.operators.lessEqual' => 'Less or equal',
+			'searchFilter.operators.range' => 'Range',
+			'searchFilter.operators.inOp' => 'Contains any',
+			'searchFilter.operators.notIn' => 'Excludes any',
 			'search.users' => 'Users',
 			'search.threads' => 'Thread',
 			'search.search' => 'Search',

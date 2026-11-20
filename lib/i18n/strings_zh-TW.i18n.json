@@ -90,6 +90,46 @@
     "select_year": "選擇年份",
     "select_month": "選擇月份"
   },
+  "searchFilter": {
+    "title": "進階搜尋",
+    "addFilter": "新增篩選條件",
+    "reset": "重設",
+    "apply": "套用",
+    "empty": "尚無篩選條件",
+    "pleaseEnterValue": "請輸入值",
+    "selectDate": "選擇日期",
+    "startDate": "開始",
+    "endDate": "結束",
+    "fields": {
+      "title": "標題",
+      "body": "簡介",
+      "tags": "標籤",
+      "author": "作者",
+      "date": "發布日期",
+      "registrationDate": "註冊日期",
+      "private": "私密",
+      "duration": "時長（秒）",
+      "likes": "讚數",
+      "views": "播放量",
+      "comments": "留言數",
+      "rating": "分級",
+      "imageCount": "圖片數",
+      "username": "使用者名稱",
+      "nickname": "暱稱"
+    },
+    "operators": {
+      "contains": "包含",
+      "equals": "等於",
+      "notEquals": "不等於",
+      "greaterThan": "大於",
+      "greaterEqual": "大於等於",
+      "lessThan": "小於",
+      "lessEqual": "小於等於",
+      "range": "範圍",
+      "inOp": "包含任一",
+      "notIn": "不含任一"
+    }
+  },
   "search": {
     "users": "使用者",
     "threads": "帖子",

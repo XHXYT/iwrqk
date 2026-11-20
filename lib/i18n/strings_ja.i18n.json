@@ -90,6 +90,46 @@
     "select_year": "年を選択",
     "select_month": "月を選択"
   },
+  "searchFilter": {
+    "title": "詳細検索",
+    "addFilter": "条件を追加",
+    "reset": "リセット",
+    "apply": "適用",
+    "empty": "条件がありません",
+    "pleaseEnterValue": "値を入力",
+    "selectDate": "日付を選択",
+    "startDate": "開始",
+    "endDate": "終了",
+    "fields": {
+      "title": "タイトル",
+      "body": "説明",
+      "tags": "タグ",
+      "author": "投稿者",
+      "date": "投稿日",
+      "registrationDate": "登録日",
+      "private": "非公開",
+      "duration": "長さ（秒）",
+      "likes": "いいね数",
+      "views": "再生数",
+      "comments": "コメント数",
+      "rating": "レーティング",
+      "imageCount": "画像枚数",
+      "username": "ユーザー名",
+      "nickname": "ニックネーム"
+    },
+    "operators": {
+      "contains": "含む",
+      "equals": "等しい",
+      "notEquals": "等しくない",
+      "greaterThan": "より大きい",
+      "greaterEqual": "以上",
+      "lessThan": "より小さい",
+      "lessEqual": "以下",
+      "range": "範囲",
+      "inOp": "いずれかを含む",
+      "notIn": "いずれも含まない"
+    }
+  },
   "search": {
     "users": "ユーザー",
     "threads": "投稿",
